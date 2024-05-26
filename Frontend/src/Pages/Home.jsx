@@ -32,6 +32,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import theme from '../theme';
+
 import {
   ChakraProvider,
   Button,
@@ -64,11 +65,14 @@ const Home = () => {
         onClose();
       }
     };
-  
+   
+
+
     return (
       <ChakraProvider theme={theme}>
           <h1 className="animated">Welcome!!</h1>
-          <h3 className="animated">To your Virtual Personal Assistant</h3>
+          <h2 className="animated">To your Virtual Personal Assistant</h2>
+          <div className="calendar-container">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
@@ -88,6 +92,8 @@ const Home = () => {
             }}
             eventColor='#378006' // Default event color
           />
+          </div>
+         
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent bg="blue.800" color="white" >
