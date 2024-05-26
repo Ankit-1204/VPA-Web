@@ -77,7 +77,8 @@ button:focus-visible {
 .calendar-container {
   width: 100%; /* Adjust the width as needed */
   align-items: center;
-  padding-top: 50px; /* Add some padding if needed */
+  padding-top: 50px; 
+
 }
 
 @media (min-width: 1024px) {
