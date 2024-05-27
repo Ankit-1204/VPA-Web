@@ -33,11 +33,6 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
-h2{
-  font-size: 1.5em;
-  
-}
 @keyframes fadeIn {
   0% { opacity: 0; }
   100% { opacity: 1; }
@@ -52,7 +47,7 @@ h1.animated {
   animation: fadeIn 2s ease-in-out;
 }
 
-h2.animated {
+h3.animated {
   animation: slideIn 2s ease-in-out;
 }
 
@@ -74,25 +69,6 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-.calendar-container {
-  width: 100%; /* Adjust the width as needed */
-  align-items: center;
-  padding-top: 50px; 
-
-}
-
-@media (min-width: 1024px) {
-  .calendar-container {
-    width: 150%;
-  }
-}
-
-@media (min-width: 1024px) {
-  .calendar-container {
-    width: 150%;
-  }
-}
-
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -107,42 +83,3 @@ button:focus-visible {
   }
 }
 
-.calendar-box {
-  background-color: #dbd1d1;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
-
-.fc-toolbar {
-  background-color: #1a202c; /* Dark background for the toolbar */
-  color: rgb(252, 245, 245);
-  border-radius: 5px;
-  padding: 10px;
-}
-
-.fc-button {
-  background-color: #3182ce; /* Custom button color */
-  color: white;
-  border-radius: 5px;
-  border: none;
-}
-
-.fc-button:hover {
-  background-color: #2b6cb0;
-}
-
-.fc-daygrid-event {
-  background-color: #4c8889; /* Custom event color */
-  color: rgb(235, 231, 231);
-  border-radius: 4px;
-  padding: 2px 5px;
-}
-
-.fc-daygrid-day {
-  background-color: #2d71b4; /* Custom background color for days */
-}
-
-.fc-title {
-  color: #1a202c; /* Custom text color for titles */
-}
