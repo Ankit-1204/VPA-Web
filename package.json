@@ -1,11 +1,14 @@
 {
   "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fullcalendar/daygrid": "^6.1.13",
     "@fullcalendar/interaction": "^6.1.13",
     "@fullcalendar/react": "^6.1.13",
+    "@google-cloud/dialogflow": "^6.7.0",
+    "axios": "^1.7.2",
     "framer-motion": "^11.2.6"
   }
 }
