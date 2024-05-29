@@ -54,6 +54,7 @@ const Home = () => {
     const [selectedDate, setSelectedDate] = useState('');
   
     const handleClick = (e) => {
+      console.log(e.dateStr)
       setSelectedDate(e.dateStr);
       onOpen();
     };
@@ -72,30 +73,40 @@ const Home = () => {
       setNewEventTitle('');
       console.log(msg);
       try {
-        const response = await fetch('http://localhost:8000/api/webhook', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
+          const response = await axios.post('http://localhost:8000/api/webhook', {
               query: msg,
-              sessionId: '123465'
-          })
-      });
+              sessionId: '123465',
+          });
+          console.log('sent and received');
+          console.log(response.data.type);
+          if(response.data.type==='Schedule Meeting'){
+            const {date,time}=response.data.datee;
 
-      if (!response.ok) {
-          throw new Error('Network response was not ok');
+            const dateObject=new Date(date.stringValue);
+            const year = dateObject.getFullYear();
+            const month = (dateObject.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+            const day = dateObject.getDate().toString().padStart(2, '0');
+            const dat = `${year}-${month}-${day}`;
+
+            const timeObject = new Date(time.stringValue.substring(0, 19));
+
+            const hours = timeObject.getHours().toString().padStart(2, '0');
+            const minutes = timeObject.getMinutes().toString().padStart(2, '0');
+            const seconds = timeObject.getSeconds().toString().padStart(2, '0');
+            const tim = `${hours}:${minutes}:${seconds}`;
+            console.log(dat)
+            console.log(tim)
+            const eventDateTime = new Date(`${dat}T${tim}`);
+            
+            setEvents([...events, {
+              title: "botMessage",
+              start: eventDateTime
+          }]);}
+          // if(response.data.type==='Schedule Meeting')
+      } catch (error) {
+          console.error('Error:', error);
       }
-
-      const data = await response.json();
-      console.log('Sent and received');
-      console.log(data);
-      const botMessage = data.fulfillmentText;
-      console.log(botMessage);
-  } catch (error) {
-      console.error('Error:', error);
-  }
-};
+  };
     return (
       
       <ChakraProvider theme={theme}>

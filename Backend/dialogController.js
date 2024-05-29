@@ -14,7 +14,7 @@ const config={
 const sessionClient = new Dialogflow.SessionsClient(config);
 
 const scheduleMeet = async (req,res) => {
-    console.log(req);
+   
     
 
     const sessionPath = sessionClient.projectAgentSessionPath(projectId, '123');
@@ -32,10 +32,9 @@ const scheduleMeet = async (req,res) => {
     try {
         const responses = await sessionClient.detectIntent(request);
         const result = responses[0].queryResult;
-        console.log(result);
-        return{
-            response:result.fulfillmentText
-        }
+        console.log(result)
+        console.log(result.parameters.fields)
+        res.json({ response: result.fulfillmentText , datee:result.parameters.fields, type:result.intent.displayName})
         
     } catch (error) {
         console.error('Error processing request:', error);
