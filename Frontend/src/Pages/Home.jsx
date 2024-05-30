@@ -102,7 +102,12 @@ const Home = () => {
           }]);}
           if(response.data.type==='Reschedule Meeting'){
             const {date1,time1,date,time}=response.data.datee;
-
+            if(date1.stringValue ==='' || time1.stringValue ==='' || date.stringValue ==='' ||time.stringValue ==='' ){
+              console.log("please provide data correctly");
+              return{
+                msg:"please provide data correctly"
+              }
+            }
             const dateOld=new Date(date.stringValue);
             const year = dateOld.getFullYear();
             const month = (dateOld.getMonth() + 1).toString().padStart(2, '0'); 
