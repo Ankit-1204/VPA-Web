@@ -75,7 +75,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 .calendar-container {
-  width: 100%; /* Adjust the width as needed */
+  width: 10%; /* Adjust the width as needed */
   align-items: center;
   padding-top: 50px; 
 
@@ -83,7 +83,7 @@ button:focus-visible {
 
 @media (min-width: 1024px) {
   .calendar-container {
-    width: 150%;
+    width: 10%;
   }
 }
 
