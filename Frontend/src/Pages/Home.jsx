@@ -147,6 +147,23 @@ const Home = () => {
           }));
             
           }
+          if(response.data.type==='Delete Meeting'){
+            const {date,time}=response.data.datee;
+            const dateObject=new Date(date.stringValue);
+            const year = dateObject.getFullYear();
+            const month = (dateObject.getMonth() + 1).toString().padStart(2, '0'); 
+            const day = dateObject.getDate().toString().padStart(2, '0');
+            const dat = `${year}-${month}-${day}`;
+
+            const timeObject = new Date(time.stringValue.substring(0, 19));
+
+            const hours = timeObject.getHours().toString().padStart(2, '0');
+            const minutes = timeObject.getMinutes().toString().padStart(2, '0');
+            const seconds = timeObject.getSeconds().toString().padStart(2, '0');
+            const tim = `${hours}:${minutes}:${seconds}`;
+            const eventDateTime = new Date(`${dat}T${tim}`);
+            setEvents(events.filter(event => event.start.toISOString()!== eventDateTime.toISOString()));
+          }
       } catch (error) {
           console.error('Error:', error);
       }
