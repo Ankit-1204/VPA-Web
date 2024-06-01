@@ -1,5 +1,5 @@
 const express=require ('express');
-const {scheduleMeet}=require('../dialogController');
+const {scheduleMeet}=require('../controllers/dialogController');
 const router =express.Router();
 
 router.post("/webhook",scheduleMeet);
