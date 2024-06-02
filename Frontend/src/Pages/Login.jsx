@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
     Flex,
     Box,
@@ -15,10 +16,40 @@ import {
     IconButton,
   } from '@chakra-ui/react';
   import { FaMoon, FaSun } from 'react-icons/fa';
-  
+  import axios from 'axios';
+  import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
   export default function Login() {
     const { colorMode, toggleColorMode } = useColorMode();
+    const Navigate=useNavigate();
     const formBackground = useColorModeValue('gray.100', 'gray.700');
+    const [data, setData]=useState({
+      email:"",
+      password:"",
+    })
+    const handleLogin= async(e)=>{
+        e.preventDefault();
+        const em=email;
+        const ps=password;
+
+        try{
+          const {data}=await axios.post('http://localhost:8000/auth/login',{
+            email:em,
+            password:ps
+          })
+          if(data.error){
+            toast.error(data.error);
+          }
+          else{
+            toast.success("Login is successful!");
+            var delay=500;
+            setTimeout(()=>Navigate('/'),delay)
+          }
+        }catch(error){
+          console.log(error);
+        }
+    }
     return (
       <Flex
         minH={'100vh'}
@@ -38,14 +69,14 @@ import {
             <Stack spacing={4}>
               <FormControl id="email">
                 <FormLabel>Email address</FormLabel>
-                <Input type="email" />
+                <Input type="email" value={data.email} onChange={(e)=>{setData({...data,email:e.target.value})}}/>
               </FormControl>
               <FormControl id="password">
                 <FormLabel>Password</FormLabel>
-                <Input type="password" />
+                <Input type="password" value={data.password} onChange={(e)=>{setData({...data,password:e.target.value})}}/>
               </FormControl>
               <Text align="center">
-                Don't have an account? <Link color="blue.400">Sign up</Link>
+                Don't have an account? <Link color="blue.400" as={RouterLink} to={'http://localhost:5173/signup'}>Sign up</Link>
               </Text>
               <Stack spacing={10}>
                 <Stack
@@ -58,7 +89,8 @@ import {
                   color={'white'}
                   _hover={{
                     bg: 'blue.500',
-                  }}>
+                  }}
+                    onClick={handleLogin}>
                   Sign in
                 </Button>
               </Stack>

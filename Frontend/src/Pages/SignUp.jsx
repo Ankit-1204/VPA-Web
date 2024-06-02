@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {toast} from 'react-hot-toast'
+import { Link as RouterLink } from 'react-router-dom';
 import {
     Flex,
     Box,
@@ -84,7 +85,13 @@ import { useNavigate } from 'react-router-dom';
       else{
         console.log('abc');
         toast.success("Successfully registered !!");
-        Navigate('/');
+        var delayInMilliseconds = 500; 
+
+setTimeout(function() {navigate('/');
+  
+}, delayInMilliseconds);
+      
+
       }
     } catch (error){
       console.log(error);
@@ -161,7 +168,7 @@ import { useNavigate } from 'react-router-dom';
               </Stack>
               <Stack pt={6}>
                 <Text align={'center'}>
-                  Already a user? <Link color={'blue.400'}>Login</Link>
+                  Already a user? <Link color={'blue.400'} as={RouterLink} to={'http://localhost:5173/login'}>Login</Link>
                 </Text>
               </Stack>
             </Stack>
