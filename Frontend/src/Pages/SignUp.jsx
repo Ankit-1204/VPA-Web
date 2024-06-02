@@ -1,3 +1,5 @@
+import axios from 'axios';
+import {toast} from 'react-hot-toast'
 import {
     Flex,
     Box,
@@ -21,14 +23,23 @@ import {
   import { useState } from 'react';
   import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
   import { FaMoon, FaSun } from 'react-icons/fa';
-  
+import { useNavigate } from 'react-router-dom';
+
   export default function SignUp() {
+    const Navigate=useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [data, setData]=useState({
+      firstName:"",
+      lastName:"",
+      email:"",
+      password:"",
+      teamId:""
+    })
     const [isCreating, setIsCreating] = useState(false);
     const [isJoining, setIsJoining] = useState(false);
     const { colorMode, toggleColorMode } = useColorMode();
     const formBackground = useColorModeValue('gray.100', 'gray.700');
-    const toast = useToast();
+    const toas = useToast();
   
     const handleCheckboxChange = (type) => () => {
       if (type === 'creating') {
@@ -40,9 +51,16 @@ import {
       }
     };
   
-    const handleSignUp = () => {
+    const handleSignUp = async (e) => {
+      e.preventDefault();
+      const fn=data.firstName;
+      const ln=data.lastName;
+      const em=data.email;
+      const ps=data.password;
+      const mi=data.teamId;
+      const jm=isJoining;
       if (!isCreating && !isJoining) {
-        toast({
+        toas({
           title: "Selection required.",
           description: "Please select either 'Creating' or 'Joining'.",
           status: "error",
@@ -51,7 +69,26 @@ import {
         });
         return;
       }
-      // Handle sign-up logic here
+      try {
+      const {data} = await axios.post('http://localhost:8000/auth/login',{
+            firstName:fn,
+            lastName:ln,
+            email:em,
+            password:ps,
+            teamId:mi,
+            isJoining:jm
+      });
+      if(data.error){
+        toast.error(response.error);
+      }
+      else{
+        console.log('abc');
+        toast.success("Successfully registered !!");
+        Navigate('/');
+      }
+    } catch (error){
+      console.log(error);
+    }
     };
   
     return (
@@ -68,24 +105,24 @@ import {
                 <Box>
                   <FormControl id="firstName" isRequired>
                     <FormLabel>First Name</FormLabel>
-                    <Input type="text" />
+                    <Input type="text" value={data.firstName} onChange={(e )=>setData({...data,firstName: e.target.value})}/>
                   </FormControl>
                 </Box>
                 <Box>
                   <FormControl id="lastName">
                     <FormLabel>Last Name</FormLabel>
-                    <Input type="text" />
+                    <Input type="text" value={data.lastName} onChange={(e )=>setData({...data,lastName: e.target.value})}/>
                   </FormControl>
                 </Box>
               </HStack>
               <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
-                <Input type="email" />
+                <Input type="email" value={data.email} onChange={(e )=>setData({...data,email: e.target.value})}/>
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
-                  <Input type={showPassword ? 'text' : 'password'} />
+                  <Input type={showPassword ? 'text' : 'password'} value={data.password} onChange={(e )=>setData({...data,password: e.target.value})}/>
                   <InputRightElement h={'full'}>
                     <Button variant={'ghost'} onClick={() => setShowPassword((showPassword) => !showPassword)}>
                       {showPassword ? <ViewIcon /> : <ViewOffIcon />}
@@ -93,6 +130,12 @@ import {
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
+              {isJoining && (
+                <FormControl id="email" isRequired>
+                <FormLabel>Meeting ID</FormLabel>
+                <Input type="text" />
+              </FormControl>
+              )}
               <Stack spacing={5} direction="row" align="center">
                 <Checkbox isChecked={isCreating} onChange={handleCheckboxChange('creating')}>
                   Creating
@@ -101,6 +144,7 @@ import {
                   Joining
                 </Checkbox>
               </Stack>
+              
               <Stack spacing={10} pt={2}>
                 <Button
                   loadingText="Submitting"
