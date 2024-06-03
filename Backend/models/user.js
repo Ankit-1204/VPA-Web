@@ -1,9 +1,11 @@
 const mongoose=require('mongoose');
 const {Schema}=mongoose
 const userSchema=new Schema({
-    name:String,
-    organisation:String,
-    department:String,
+    firstName:String,
+    lastName:String,
+    email:String,
+    team:String, 
+    password:String,
     remainder:[{type:Schema.Types.ObjectId, ref:'events'}]
 })
 
@@ -16,4 +18,4 @@ const eventsSchema=new Schema({
 const User=mongoose.model('user',userSchema);
 const Event=mongoose.model('events',eventsSchema);
 
-module.exports(User,Event);
+module.exports={User,Event};
