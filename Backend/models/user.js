@@ -18,4 +18,4 @@ const eventsSchema=new Schema({
 const User=mongoose.model('user',userSchema);
 const Event=mongoose.model('events',eventsSchema);
 
-module.exports(User,Event);
+module.exports={User,Event};

@@ -3,6 +3,8 @@ const express=require('express');
 const cors= require('cors')
 const {mongoose }=require('mongoose');
 const cookieParser= require('cookie-parser')
+const dialogRoute=require('./routes/dialogRoutes');
+const authRouter =require("./routes/authRoutes")
 const bodyParser=require('body-parser')
 const app=express();
 
@@ -25,8 +27,7 @@ mongoose.connect(process.env.MONGO_URL)
 
 
 
-
-const dialogRoute=require('./routes/dialogRoutes');
 app.use('/api',dialogRoute);
+app.use('/auth',authRouter);
 const port=8000;
 app.listen(port,()=>console.log('Server is Running on port ${port}'))

@@ -30,8 +30,8 @@ import toast from 'react-hot-toast';
     })
     const handleLogin= async(e)=>{
         e.preventDefault();
-        const em=email;
-        const ps=password;
+        const em=data.email;
+        const ps=data.password;
 
         try{
           const {data}=await axios.post('http://localhost:8000/auth/login',{
