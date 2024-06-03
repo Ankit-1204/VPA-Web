@@ -1,9 +1,12 @@
 
 
+
+
 import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+
 import {
     ChakraProvider,
     Button,
@@ -26,6 +29,7 @@ import {
     DrawerCloseButton,
     Flex,
     Avatar,
+
     Text,
     Heading,
     useColorMode,
@@ -34,6 +38,7 @@ import {
 import { FiUser, FiMoon, FiSun } from 'react-icons/fi';
 import axios from "axios";
 
+
 const Home = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
@@ -41,7 +46,9 @@ const Home = () => {
     const [newEventTitle, setNewEventTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDateEvents, setSelectedDateEvents] = useState([]);
+
     const { colorMode, toggleColorMode } = useColorMode();
+
 
     const handleClick = (e) => {
         const date = e.dateStr;
@@ -60,6 +67,7 @@ const Home = () => {
             onClose();
         }
     };
+
     const handleInputEvent = async () => {
       const msg = newEventTitle;
       
@@ -216,6 +224,7 @@ const Home = () => {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent bg={colorMode === 'light' ? 'white' : 'gray.800'} color={colorMode === 'light' ? 'black' : 'white'}>
+
                     <ModalHeader>Add Event</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
@@ -223,6 +232,7 @@ const Home = () => {
                             placeholder="Event Title"
                             value={newEventTitle}
                             onChange={(e) => setNewEventTitle(e.target.value)}
+
                             mb={4}
                             bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
                             color={colorMode === 'light' ? 'black' : 'white'}
@@ -235,23 +245,28 @@ const Home = () => {
                                 <ul>
                                     {selectedDateEvents.map((event, index) => (
                                         <li key={index}>{event.start}</li>
+
                                     ))}
                                 </ul>
                             </Box>
                         )}
                     </ModalBody>
                     <ModalFooter>
+
                         <Button colorScheme="teal" mr={3} onClick={handleAddEvent}>
                             Add Event
                         </Button>
                         <Button onClick={onClose}>Cancel</Button>
+
                     </ModalFooter>
                 </ModalContent>
             </Modal>
 
             <Drawer isOpen={isDrawerOpen} placement="right" onClose={onDrawerClose}>
                 <DrawerOverlay />
+
                 <DrawerContent bg="blue.900" color="white">
+
                     <DrawerCloseButton />
                     <DrawerHeader>Profile</DrawerHeader>
 
@@ -264,12 +279,15 @@ const Home = () => {
                     </DrawerBody>
 
                     <DrawerFooter>
+
                         <Button colorScheme="teal" mr={3} onClick={onDrawerClose}>
+
                             Close
                         </Button>
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
+
 
             <IconButton
                 icon={colorMode === 'light' ? <FiMoon /> : <FiSun />}
@@ -286,3 +304,4 @@ const Home = () => {
 };
 
 export default Home;
+

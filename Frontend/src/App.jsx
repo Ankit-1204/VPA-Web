@@ -4,11 +4,12 @@ import Home from './Pages/Home'
 import Login from './Pages/Login'
 import SignUp from './Pages/SignUp'
 import './App.css'
-
+import Admin from './Pages/Admin'
+import Login from './Pages/Login'
+import SignUp from './Pages/SignUp'
 function App() {
 
   return (
-    
     <Router>
     <Routes>
       <Route path='/signup' element={<SignUp/>}/>
@@ -16,7 +17,6 @@ function App() {
       <Route path='/' element={<Home/>}/>
     </Routes>
     </Router>
-    
   )
 }
 
