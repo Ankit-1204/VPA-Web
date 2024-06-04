@@ -62,7 +62,7 @@ const Home = () => {
     return (
         <ChakraProvider>
             <Flex direction="column" minHeight="100vh">
-                <Box width="100%" bg="blue.900" color="white" py={4} px={24}>
+                <Box width="100%" bg={colorMode === 'light' ? 'gray.800' : 'gray.900'} color="white" py={4} px={8}>
                     <Flex justifyContent="space-between" alignItems="center">
                         <Box>
                             <Heading size="lg">Welcome</Heading>
@@ -106,7 +106,7 @@ const Home = () => {
                                 week: 'Week',
                                 day: 'Day'
                             }}
-                            eventColor='#3182CE'
+                            eventColor={colorMode === 'light' ? '#3182CE' : '#90CDF4'}
                             height="auto"
                         />
                     </Box>
@@ -150,7 +150,7 @@ const Home = () => {
 
                 <Drawer isOpen={isDrawerOpen} placement="right" onClose={onDrawerClose}>
                     <DrawerOverlay />
-                    <DrawerContent bg="blue.900" color="white">
+                    <DrawerContent bg={colorMode === 'light' ? 'gray.800' : 'gray.900'} color="white">
                         <DrawerCloseButton />
                         <DrawerHeader>Profile</DrawerHeader>
 
@@ -170,7 +170,7 @@ const Home = () => {
                     </DrawerContent>
                 </Drawer>
 
-                <Box as="footer" width="100%" bg="blue.900" color="white" py={4}>
+                <Box as="footer" width="100%" bg={colorMode === 'light' ? 'gray.800' : 'gray.900'} color="white" py={4}>
                     <Flex justifyContent="center">
                         <Text fontSize="md">© 2024 Onlybank. All rights reserved.</Text>
                     </Flex>

@@ -16,11 +16,14 @@
     "@fullcalendar/daygrid": "^6.1.13",
     "@fullcalendar/interaction": "^6.1.13",
     "@fullcalendar/react": "^6.1.13",
-    "framer-motion": "^11.2.6",
+    "axios": "^1.7.2",
+    "framer-motion": "^11.2.10",
+    "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.2.1",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "recharts": "^2.12.7"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
