@@ -113,7 +113,36 @@ const login= async(req,res)=>{
     console.log(error);
 }
 }
+const logout=(req,res)=>{
+    try{
+    res.cookie("token","",{maxAge:0});
+    res.status(200).json({message:"Logged out successfully"});
+    }catch(error){
+     console.log("Error in logout controller",error.message);
+     res.status(500).json({error:"Internal Server Error"});
+    }
+};
+
+const profile=(req,res)=>{
+    try{
+        const {token}= req.cookies;
+        if(token){
+            jwt.verify(token,process.env.JWT_SECRET,{expiresIn: '15d'},(err,user)=>{
+                if(err) 
+                {
+                  res.json(null)
+                }
+                res.json(user)
+            })
+        }
+        else{
+             res.json(null);
+        }
+    }catch(err){
+        console.log(err);
+    }
+}
 
 module.exports={
-    signUp,login
+    signUp,login,logout,profile
 }
