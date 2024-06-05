@@ -1,6 +1,6 @@
 
-
-import React, { useState } from 'react';
+import { UserContext,UserContextProvider } from '../../context/context';
+import React, { useState ,useContext} from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -34,7 +34,9 @@ import {
 import { FiUser, FiMoon, FiSun } from 'react-icons/fi';
 import axios from "axios";
 
+
 const Home = () => {
+    const {user,setUser}=useContext(UserContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
     const [events, setEvents] = useState([]);
@@ -60,6 +62,15 @@ const Home = () => {
             onClose();
         }
     };
+    const handleLogOut= async()=>{
+        try{
+            const response=await axios.post('http://localhost:8000/auth/logout',{});
+            console.log(response.data);
+            setUser(false);
+        }catch(error){
+            console.log(error);
+        }
+    }
     const handleInputEvent = async () => {
       const msg = newEventTitle;
       
@@ -264,8 +275,8 @@ const Home = () => {
                     </DrawerBody>
 
                     <DrawerFooter>
-                        <Button colorScheme="teal" mr={3} onClick={onDrawerClose}>
-                            Close
+                        <Button colorScheme="teal" mr={3} onClick={handleLogOut}>
+                            logout
                         </Button>
                     </DrawerFooter>
                 </DrawerContent>

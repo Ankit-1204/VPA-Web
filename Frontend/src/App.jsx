@@ -7,34 +7,28 @@ import { useEffect } from 'react'
 import { useContext } from 'react'
 import './App.css'
 import axios from 'axios'
+axios.defaults.withCredentials=true
 import { useNavigate } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
 import {UserContext,UserContextProvider} from '../context/context';
 function App() {
-  
-const [islogin,setLogin]=useState(false);
-useEffect(()=>{
-  const logStatus= async ()=>{
-    try{
-      const response= await axios.get('http://localhost:8000/auth/profile');
-      if(response.data){
-         setLogin(true);
-      }
-    }catch(error){
-      console.log(error);
-    }
-  }
-  logStatus();
-},[]);
+
+const {user}=useContext(UserContext);
+console.log(user)
   return (
     
+    
+   
     <Router>
-    <Routes>
-      <Route path='/signup' element={islogin==true?( <Navigate to="/" replace />) :<SignUp/>}/>
-      <Route path='/login' element={islogin==true?( <Navigate to="/" replace />) :<Login/>}/>
-      <Route path='/' element= {<Home/>}/>
-    </Routes>
+      <Routes>
+      <Route path='/signup' element= {!user?<SignUp/>:( <Navigate to="/home" replace />)}/>
+      <Route path='/login' element= {!user?<Login/>:( <Navigate to="/home" replace />)}/>
+      <Route path='/home' element= {!user?( <Navigate to="/login" replace />):<Home/>}/>
+      <Route path='/' element={!user?( <Navigate to="/login" replace />) :( <Navigate to="/home" replace />)}/>
+      </Routes>
     </Router>
+   
+    
     
   )
 }

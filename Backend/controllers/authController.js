@@ -104,7 +104,8 @@ const login= async(req,res)=>{
         return res.json({error:'Passwords do not match'})
     }
     else{
-        jwt.sign({team:teamId,id:user._id,firstName:firstName,lastName:lastName,email:email},process.env.JWT_SECRET,{},(err,token)=>{
+        console.log(process.env.JWT_SECRET);
+        jwt.sign({team:teamId,id:user._id,firstName:firstName,lastName:lastName,email:email},process.env.JWT_SECRET,{expiresIn: '15d'},(err,token)=>{
             if(err) throw err;
             res.cookie('token',token).json(user)
            })
@@ -127,15 +128,18 @@ const profile=(req,res)=>{
     try{
         const {token}= req.cookies;
         if(token){
-            jwt.verify(token,process.env.JWT_SECRET,{expiresIn: '15d'},(err,user)=>{
+            jwt.verify(token,process.env.JWT_SECRET,(err,user)=>{
                 if(err) 
                 {
+                    console.log(err);
                   res.json(null)
                 }
+                console.log(user);
                 res.json(user)
             })
         }
         else{
+            console.log('no cookie')
              res.json(null);
         }
     }catch(err){

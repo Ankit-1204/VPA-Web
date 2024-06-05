@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {toast} from 'react-hot-toast'
+import AuthHelper from './helper/AuthHelp';
 import { Link as RouterLink } from 'react-router-dom';
 import {
     Flex,
@@ -21,7 +22,7 @@ import {
     Checkbox,
     useToast,
   } from '@chakra-ui/react';
-  import { useState } from 'react';
+  import { useState , useEffect} from 'react';
   import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
   import { FaMoon, FaSun } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -36,6 +37,12 @@ import { useNavigate } from 'react-router-dom';
       password:"",
       teamId:""
     })
+    const islogin=AuthHelper();
+    useEffect(() => {
+      if (islogin) {
+        Navigate('/home');
+      }
+    }, [islogin, Navigate]);
     const [isCreating, setIsCreating] = useState(false);
     const [isJoining, setIsJoining] = useState(false);
     const { colorMode, toggleColorMode } = useColorMode();
@@ -87,7 +94,7 @@ import { useNavigate } from 'react-router-dom';
         toast.success("Successfully registered !!");
         var delayInMilliseconds = 500; 
 
-setTimeout(function() {navigate('/');
+setTimeout(function() {Navigate('/home');
   
 }, delayInMilliseconds);
       

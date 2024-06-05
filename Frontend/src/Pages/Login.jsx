@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState,useEffect,useContext } from 'react';
+import { UserContext,UserContextProvider } from '../../context/context';
+
+import { useNavigate } from 'react-router-dom';
 import {
     Flex,
     Box,
@@ -18,9 +21,11 @@ import {
   import { FaMoon, FaSun } from 'react-icons/fa';
   import axios from 'axios';
   import { Link as RouterLink } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+  import AuthHelper from './helper/AuthHelp';
+
 import toast from 'react-hot-toast';
   export default function Login() {
+    const {user,setUser}=useContext(UserContext);
     const { colorMode, toggleColorMode } = useColorMode();
     const Navigate=useNavigate();
     const formBackground = useColorModeValue('gray.100', 'gray.700');
@@ -28,6 +33,14 @@ import toast from 'react-hot-toast';
       email:"",
       password:"",
     })
+
+  
+    // const islogin=AuthHelper();
+    // useEffect(() => {
+    //   if (islogin) {
+    //     Navigate('/home');
+    //   }
+    // }, [islogin, Navigate]);
     const handleLogin= async(e)=>{
         e.preventDefault();
         const em=data.email;
@@ -44,12 +57,13 @@ import toast from 'react-hot-toast';
           else{
             toast.success("Login is successful!");
             var delay=500;
-            setTimeout(()=>Navigate('/'),delay)
+            setUser(true);
           }
         }catch(error){
           console.log(error);
         }
     }
+
     return (
       <Flex
         minH={'100vh'}
