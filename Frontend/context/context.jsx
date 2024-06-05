@@ -1,11 +1,20 @@
 import axios from 'axios';
 import { createContext ,useState,useEffect} from 'react';
 
-const userContext=createContext({});
+export const UserContext= createContext({})
 
-const userContextset= ({children})=>{
-    const [state,setState]=useState(null);
+export function UserContextProvider({children}){
+    const [user,setUser]=useState(null);
     useEffect(()=>{
-        const data=axios.post('/login')
-    })
+        if(!user){
+            axios.get('/profile').then(({data})=>{
+                setUser(data)
+            })
+        }
+    },[])
+    return (
+        <UserContext.Provider value={{user,setUser}}>
+            {children}
+        </UserContext.Provider>
+    )
 }

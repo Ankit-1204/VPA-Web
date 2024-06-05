@@ -9,9 +9,10 @@ import './App.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
+import {UserContext,UserContextProvider} from '../context/context';
 function App() {
   
-  const [islogin,setLogin]=useState(false);
+const [islogin,setLogin]=useState(false);
 useEffect(()=>{
   const logStatus= async ()=>{
     try{
