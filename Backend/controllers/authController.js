@@ -1,6 +1,6 @@
 const jwt= require('jsonwebtoken')
 const {hashPassword,comparePassword} = require('../helpers/auth');
-const {User} = require('../models/user')
+const {User,Team} = require('../models/user')
 
 const signUp=async (req,res)=>{
     const generateRandomString = (length) => {

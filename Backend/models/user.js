@@ -15,7 +15,13 @@ const eventsSchema=new Schema({
     users:[{type:Schema.Types.ObjectId, ref:'users'}]
 })
 
+const teamsSchema=new Schema({
+    team:String,
+    users:[{type:Schema.Types.ObjectId,ref:'users'}]
+})
+
 const User=mongoose.model('user',userSchema);
 const Event=mongoose.model('events',eventsSchema);
+const Team=mongoose.model('teams',teamsSchema);
 
-module.exports={User,Event};
+module.exports={User,Event,Team};
