@@ -24,7 +24,7 @@ const App = () => {
   const [commandsList, setCommandsList] = useState([]);
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const recipients = ['Employee 1', 'Employee 2', 'Employee 3'];
+  const recipients = ['Employee 1', 'Employee 2', 'Employee 3', 'Employee 4', 'Employee 5','Employee 6', 'Employee 7', 'Employee 8', 'Employee 9', 'Employee 10'];
 
   const handleCommandChange = (e) => setCommand(e.target.value);
 
@@ -80,17 +80,19 @@ const App = () => {
                 onChange={handleCommandChange}
                 mb={4}
               />
-              <HStack>
-                {recipients.map((recipient) => (
-                  <Checkbox
-                    key={recipient}
-                    isChecked={selectedRecipients.includes(recipient)}
-                    onChange={() => handleRecipientChange(recipient)}
-                  >
-                    {recipient}
-                  </Checkbox>
-                ))}
-              </HStack>
+              <Box h="150px" overflowY="auto" mb={4}>
+                <VStack align="start">
+                  {recipients.map((recipient) => (
+                    <Checkbox
+                      key={recipient}
+                      isChecked={selectedRecipients.includes(recipient)}
+                      onChange={() => handleRecipientChange(recipient)}
+                    >
+                      {recipient}
+                    </Checkbox>
+                  ))}
+                </VStack>
+              </Box>
               <Button mt={4} colorScheme="teal" onClick={handleCommandSubmit}>Submit Command</Button>
             </Box>
             <Box w="full" p={6} borderWidth={1} borderRadius="md" boxShadow="md">
@@ -128,3 +130,4 @@ const App = () => {
 };
 
 export default App;
+
