@@ -1,29 +1,42 @@
 import axios from 'axios';
-import { createContext ,useState,useEffect} from 'react';
+import { createContext, useState, useEffect } from 'react';
 
-export const UserContext= createContext({})
+export const UserContext = createContext({});
 
-export function UserContextProvider({children}){
-    const [user,setUser]=useState(false);
-    useEffect(()=>{
-        if(!user){
-            console.log(1);
-            axios.get('http://localhost:8000/auth/profile').then(({data})=>{
-                if(data){
-                    console.log(2);
-                    setUser(true);
+export function UserContextProvider({ children }) {
+    const [user, setUser] = useState(false);
+    const [userInfo, setUserInfo] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const { data } = await axios.get('http://localhost:8000/auth/profile');
+                if (data) {
+                    setUserInfo(data);
+                } else {
+                    setUserInfo(null);
                 }
-                else{
-                    console.log(3);
-                    setUser(false);
-                }
-                console.log(data)
-            })
+            } catch (error) {
+                console.log(error);
+                setUserInfo(null);
+            } finally {
+                console.log(3);
+                setLoading(false);
+            }
+        };
+
+        if (userInfo==null) {
+            fetchProfile();
+        } else {
+            console.log(2);
+            setLoading(false);
         }
-    },[])
+    }, [user]);
+
     return (
-        <UserContext.Provider value={{user,setUser}}>
+        <UserContext.Provider value={{ user, setUser, userInfo, setUserInfo, loading }}>
             {children}
         </UserContext.Provider>
-    )
+    );
 }

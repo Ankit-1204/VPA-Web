@@ -8,15 +8,34 @@ import { useContext } from 'react'
 import './App.css'
 import axios from 'axios'
 axios.defaults.withCredentials=true
-import { useNavigate } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
-import {UserContext,UserContextProvider} from '../context/context';
+import {UserContext} from '../context/context';
 function App() {
 
-const {user}=useContext(UserContext);
+const {user,setUser,loading}=useContext(UserContext);
+
+useEffect(()=>{
+  const checkLogin=async ()=>{
+    try{
+      const response=await axios.get('http://localhost:8000/auth/profile')
+      if(response.data){
+        setUser(true);
+      }
+      else{
+        setUser(false);
+      }
+    }catch(error){
+      console.log(error);
+    }
+  }
+  checkLogin();
+},[])
 console.log(user)
+
+if (loading) {
+  return <div>Loading...</div>; 
+}
   return (
-    
     
    
     <Router>

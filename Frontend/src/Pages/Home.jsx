@@ -36,7 +36,7 @@ import axios from "axios";
 
 
 const Home = () => {
-    const {user,setUser}=useContext(UserContext);
+    const {user,setUser,userInfo}=useContext(UserContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
     const [events, setEvents] = useState([]);
@@ -269,8 +269,8 @@ const Home = () => {
                     <DrawerBody>
                         <Flex direction="column" alignItems="center" mt={4}>
                             <Avatar size="xl" name="User Name" src="https://bit.ly/broken-link" />
-                            <Text mt={4} fontSize="xl">User Name</Text>
-                            <Text mt={2} fontSize="md">user@example.com</Text>
+                            <Text mt={4} fontSize="xl">{userInfo.firstName+" "+ userInfo.lastName}</Text>
+                            <Text mt={2} fontSize="md">{userInfo.email}</Text>
                         </Flex>
                     </DrawerBody>
 
