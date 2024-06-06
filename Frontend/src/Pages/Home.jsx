@@ -241,7 +241,6 @@ const Home = () => {
     const [selectedDateEvents, setSelectedDateEvents] = useState([]);
     const { colorMode, toggleColorMode } = useColorMode();
 
-
     const handleClick = (e) => {
         const date = e.dateStr;
         setSelectedDate(date);
@@ -261,106 +260,112 @@ const Home = () => {
     };
 
     const handleInputEvent = async () => {
-      const msg = newEventTitle;
-      
-      setNewEventTitle('');
-      console.log(msg);
-      try {
-          const response = await axios.post('http://localhost:8000/api/webhook', {
-              query: msg,
-              sessionId: '123465',
-          });
-          console.log('sent and received');
-          console.log(response.data.type);
-          if(response.data.type==='Schedule Meeting'){
-            const {date,time}=response.data.datee;
-    
-            const dateObject=new Date(date.stringValue);
-            const year = dateObject.getFullYear();
-            const month = (dateObject.getMonth() + 1).toString().padStart(2, '0'); 
-            const day = dateObject.getDate().toString().padStart(2, '0');
-            const dat = `${year}-${month}-${day}`;
-    
-            const timeObject = new Date(time.stringValue.substring(0, 19));
-    
-            const hours = timeObject.getHours().toString().padStart(2, '0');
-            const minutes = timeObject.getMinutes().toString().padStart(2, '0');
-            const seconds = timeObject.getSeconds().toString().padStart(2, '0');
-            const tim = `${hours}:${minutes}:${seconds}`;
-            const eventDateTime = new Date(`${dat}T${tim}`);
-            
-            setEvents([...events, {
-              title: "botMessage",
-              start: eventDateTime
-          }]);}
-          if(response.data.type==='Reschedule Meeting'){
-            const {date1,time1,date,time}=response.data.datee;
-            if(date1.stringValue ==='' || time1.stringValue ==='' || date.stringValue ==='' ||time.stringValue ==='' ){
-              console.log("please provide data correctly");
-              return{
-                msg:"please provide data correctly"
-              }
+        const msg = newEventTitle;
+        setNewEventTitle('');
+        console.log(msg);
+        try {
+            const response = await axios.post('http://localhost:8000/api/webhook', {
+                query: msg,
+                sessionId: '123465',
+            });
+            console.log('sent and received');
+            console.log(response.data.type);
+            if (response.data.type === 'Schedule Meeting') {
+                const { date, time } = response.data.datee;
+
+                const dateObject = new Date(date.stringValue);
+                const year = dateObject.getFullYear();
+                const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+                const day = dateObject.getDate().toString().padStart(2, '0');
+                const dat = `${year}-${month}-${day}`;
+
+                const timeObject = new Date(time.stringValue.substring(0, 19));
+
+                const hours = timeObject.getHours().toString().padStart(2, '0');
+                const minutes = timeObject.getMinutes().toString().padStart(2, '0');
+                const seconds = timeObject.getSeconds().toString().padStart(2, '0');
+                const tim = `${hours}:${minutes}:${seconds}`;
+                const eventDateTime = new Date(`${dat}T${tim}`);
+
+                setEvents([...events, {
+                    title: "botMessage",
+                    start: eventDateTime
+                }]);
             }
-            const dateOld=new Date(date.stringValue);
-            const year = dateOld.getFullYear();
-            const month = (dateOld.getMonth() + 1).toString().padStart(2, '0'); 
-            const day = dateOld.getDate().toString().padStart(2, '0');
-            const dat = `${year}-${month}-${day}`;
-    
-            const timeOld = new Date(time.stringValue.substring(0, 19));
-    
-            const hours = timeOld.getHours().toString().padStart(2, '0');
-            const minutes = timeOld.getMinutes().toString().padStart(2, '0');
-            const seconds = timeOld.getSeconds().toString().padStart(2, '0');
-            const tim = `${hours}:${minutes}:${seconds}`;
-            const oldDateTime = new Date(`${dat}T${tim}`); 
-            
-            const dateNew=new Date(date1.stringValue);
-            const nyear = dateNew.getFullYear();
-            const nmonth = (dateNew.getMonth() + 1).toString().padStart(2, '0'); 
-            const nday = dateNew.getDate().toString().padStart(2, '0');
-            const ndat = `${nyear}-${nmonth}-${nday}`;
-    
-            const timeNew = new Date(time1.stringValue.substring(0, 19));
-    
-            const nhours = timeNew.getHours().toString().padStart(2, '0');
-            const nminutes = timeNew.getMinutes().toString().padStart(2, '0');
-            const nseconds = timeNew.getSeconds().toString().padStart(2, '0');
-            const ntim = `${nhours}:${nminutes}:${nseconds}`;
-            const newDateTime = new Date(`${ndat}T${ntim}`);  
-    
-            setEvents(events.map(event => {
-              console.log(event.start);
-              console.log(oldDateTime);
-              console.log(event.start.toISOString() === oldDateTime.toISOString());
-              if (event.start.toISOString() === oldDateTime.toISOString()) {
-                  return { ...event, start:newDateTime };
-              }
-              return event;
-          }));
-            
-          }
-          if(response.data.type==='Delete Meeting'){
-            const {date,time}=response.data.datee;
-            const dateObject=new Date(date.stringValue);
-            const year = dateObject.getFullYear();
-            const month = (dateObject.getMonth() + 1).toString().padStart(2, '0'); 
-            const day = dateObject.getDate().toString().padStart(2, '0');
-            const dat = `${year}-${month}-${day}`;
-    
-            const timeObject = new Date(time.stringValue.substring(0, 19));
-    
-            const hours = timeObject.getHours().toString().padStart(2, '0');
-            const minutes = timeObject.getMinutes().toString().padStart(2, '0');
-            const seconds = timeObject.getSeconds().toString().padStart(2, '0');
-            const tim = `${hours}:${minutes}:${seconds}`;
-            const eventDateTime = new Date(`${dat}T${tim}`);
-            setEvents(events.filter(event => event.start.toISOString()!== eventDateTime.toISOString()));
-          }
-      } catch (error) {
-          console.error('Error:', error);
-      }
+            if (response.data.type === 'Reschedule Meeting') {
+                const { date1, time1, date, time } = response.data.datee;
+                if (date1.stringValue === '' || time1.stringValue === '' || date.stringValue === '' || time.stringValue === '') {
+                    console.log("please provide data correctly");
+                    return {
+                        msg: "please provide data correctly"
+                    }
+                }
+                const dateOld = new Date(date.stringValue);
+                const year = dateOld.getFullYear();
+                const month = (dateOld.getMonth() + 1).toString().padStart(2, '0');
+                const day = dateOld.getDate().toString().padStart(2, '0');
+                const dat = `${year}-${month}-${day}`;
+
+                const timeOld = new Date(time.stringValue.substring(0, 19));
+
+                const hours = timeOld.getHours().toString().padStart(2, '0');
+                const minutes = timeOld.getMinutes().toString().padStart(2, '0');
+                const seconds = timeOld.getSeconds().toString().padStart(2, '0');
+                const tim = `${hours}:${minutes}:${seconds}`;
+                const oldDateTime = new Date(`${dat}T${tim}`);
+
+                const dateNew = new Date(date1.stringValue);
+                const nyear = dateNew.getFullYear();
+                const nmonth = (dateNew.getMonth() + 1).toString().padStart(2, '0');
+                const nday = dateNew.getDate().toString().padStart(2, '0');
+                const ndat = `${nyear}-${nmonth}-${nday}`;
+
+                const timeNew = new Date(time1.stringValue.substring(0, 19));
+
+                const nhours = timeNew.getHours().toString().padStart(2, '0');
+                const nminutes = timeNew.getMinutes().toString().padStart(2, '0');
+                const nseconds = timeNew.getSeconds().toString().padStart(2, '0');
+                const ntim = `${nhours}:${nminutes}:${nseconds}`;
+                const newDateTime = new Date(`${ndat}T${ntim}`);
+
+                setEvents(events.map(event => {
+                    console.log(event.start);
+                    console.log(oldDateTime);
+                    console.log(event.start.toISOString() === oldDateTime.toISOString());
+                    if (event.start.toISOString() === oldDateTime.toISOString()) {
+                        return { ...event, start: newDateTime };
+                    }
+                    return event;
+                }));
+
+            }
+            if (response.data.type === 'Delete Meeting') {
+                const { date, time } = response.data.datee;
+                const dateObject = new Date(date.stringValue);
+                const year = dateObject.getFullYear();
+                const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+                const day = dateObject.getDate().toString().padStart(2, '0');
+                const dat = `${year}-${month}-${day}`;
+
+                const timeObject = new Date(time.stringValue.substring(0, 19));
+
+                const hours = timeObject.getHours().toString().padStart(2, '0');
+                const minutes = timeObject.getMinutes().toString().padStart(2, '0');
+                const seconds = timeObject.getSeconds().toString().padStart(2, '0');
+                const tim = `${hours}:${minutes}:${seconds}`;
+                const eventDateTime = new Date(`${dat}T${tim}`);
+                setEvents(events.filter(event => event.start.toISOString() !== eventDateTime.toISOString()));
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
+
+    const handleLogout = () => {
+        console.log("User logged out");
+        // Add your logout logic here
+    };
+
     return (
         <ChakraProvider>
             <Box width="100%" bg="blue.900" color="white" py={4} px={24}>
@@ -407,7 +412,7 @@ const Home = () => {
                             week: 'Week',
                             day: 'Day'
                         }}
-                       eventColor={colorMode === 'light' ? '#3182CE' : '#90CDF4'}
+                        eventColor={colorMode === 'light' ? '#3182CE' : '#90CDF4'}
                         height="auto"
                     />
                 </Box>
@@ -434,19 +439,18 @@ const Home = () => {
                             <Box>
                                 <Text mb={2}>Events on {selectedDate}:</Text>
                                 <ul>
-                              {selectedDateEvents.map((event, index) => (
-                                           <li key={index}>{event.title}</li>                                        ))}
-                                   </ul>
+                                    {selectedDateEvents.map((event, index) => (
+                                        <li key={index}>{event.title}</li>
+                                    ))}
+                                </ul>
                             </Box>
                         )}
                     </ModalBody>
                     <ModalFooter>
-
                         <Button colorScheme="teal" mr={3} onClick={handleAddEvent}>
                             Add Event
                         </Button>
                         <Button onClick={onClose}>Cancel</Button>
-
                     </ModalFooter>
                 </ModalContent>
             </Modal>
@@ -455,7 +459,6 @@ const Home = () => {
                 <DrawerOverlay />
 
                 <DrawerContent bg="blue.900" color="white">
-
                     <DrawerCloseButton />
                     <DrawerHeader>Profile</DrawerHeader>
 
@@ -468,15 +471,15 @@ const Home = () => {
                     </DrawerBody>
 
                     <DrawerFooter>
-
+                        <Button colorScheme="teal" mr={3} onClick={handleLogout}>
+                            Logout
+                        </Button>
                         <Button colorScheme="teal" mr={3} onClick={onDrawerClose}>
-
                             Close
                         </Button>
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
-
 
             <IconButton
                 icon={colorMode === 'light' ? <FiMoon /> : <FiSun />}
