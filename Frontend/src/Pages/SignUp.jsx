@@ -22,8 +22,9 @@ import {
     Checkbox,
     useToast,
   } from '@chakra-ui/react';
-  import { useState , useEffect} from 'react';
+  import { useState , useEffect,useContext} from 'react';
   import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+  import { UserContext,UserContextProvider } from '../../context/context';
   import { FaMoon, FaSun } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,6 +44,7 @@ import { useNavigate } from 'react-router-dom';
         Navigate('/home');
       }
     }, [islogin, Navigate]);
+    const {user,setUser,setLoading}=useContext(UserContext);
     const [isCreating, setIsCreating] = useState(false);
     const [isJoining, setIsJoining] = useState(false);
     const { colorMode, toggleColorMode } = useColorMode();
@@ -78,7 +80,7 @@ import { useNavigate } from 'react-router-dom';
         return;
       }
       try {
-      const {data} = await axios.post('http://localhost:8000/auth/login',{
+      const {data} = await axios.post('http://localhost:8000/auth/signup',{
             firstName:fn,
             lastName:ln,
             email:em,
@@ -87,16 +89,16 @@ import { useNavigate } from 'react-router-dom';
             isJoining:jm
       });
       if(data.error){
-        toast.error(response.error);
+        console.log(data.error)
+        toast.error(data.error);
       }
       else{
         console.log('abc');
         toast.success("Successfully registered !!");
         var delayInMilliseconds = 500; 
+        setLoading(true)
+        setUser(true);
 
-setTimeout(function() {Navigate('/home');
-  
-}, delayInMilliseconds);
       
 
       }
@@ -147,7 +149,7 @@ setTimeout(function() {Navigate('/home');
               {isJoining && (
                 <FormControl id="email" isRequired>
                 <FormLabel>Meeting ID</FormLabel>
-                <Input type="text" />
+                <Input type="text" value={data.teamId} onChange={(e )=>setData({...data,teamId: e.target.value})} />
               </FormControl>
               )}
               <Stack spacing={5} direction="row" align="center">

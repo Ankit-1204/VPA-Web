@@ -30,9 +30,10 @@ useEffect(()=>{
   }
   checkLogin();
 },[])
-console.log(user)
+
 
 if (loading) {
+  console.log(user)
   return <div>Loading...</div>; 
 }
   return (

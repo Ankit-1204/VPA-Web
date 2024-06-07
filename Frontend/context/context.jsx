@@ -13,6 +13,7 @@ export function UserContextProvider({ children }) {
             try {
                 const { data } = await axios.get('http://localhost:8000/auth/profile');
                 if (data) {
+                    console.log(data);
                     setUserInfo(data);
                 } else {
                     setUserInfo(null);
@@ -26,16 +27,17 @@ export function UserContextProvider({ children }) {
             }
         };
 
-        if (userInfo==null) {
+        if (userInfo===null) {
             fetchProfile();
         } else {
+            console.log(userInfo);
             console.log(2);
             setLoading(false);
         }
     }, [user]);
 
     return (
-        <UserContext.Provider value={{ user, setUser, userInfo, setUserInfo, loading }}>
+        <UserContext.Provider value={{ user, setUser, userInfo, setUserInfo, loading ,setLoading}}>
             {children}
         </UserContext.Provider>
     );

@@ -269,8 +269,8 @@ const Home = () => {
                     <DrawerBody>
                         <Flex direction="column" alignItems="center" mt={4}>
                             <Avatar size="xl" name="User Name" src="https://bit.ly/broken-link" />
-                            <Text mt={4} fontSize="xl">{userInfo.firstName+" "+ userInfo.lastName}</Text>
-                            <Text mt={2} fontSize="md">{userInfo.email}</Text>
+                            <Text mt={4} fontSize="xl">{userInfo.user.firstName+" "+ userInfo.user.lastName}</Text>
+                            <Text mt={2} fontSize="md">{userInfo.user.email}</Text>
                         </Flex>
                     </DrawerBody>
 

@@ -25,7 +25,7 @@ import {
 
 import toast from 'react-hot-toast';
   export default function Login() {
-    const {user,setUser}=useContext(UserContext);
+    const {user,setUser,setLoading}=useContext(UserContext);
     const { colorMode, toggleColorMode } = useColorMode();
     const Navigate=useNavigate();
     const formBackground = useColorModeValue('gray.100', 'gray.700');
@@ -57,6 +57,7 @@ import toast from 'react-hot-toast';
           else{
             toast.success("Login is successful!");
             var delay=500;
+            setLoading(true)
             setUser(true);
           }
         }catch(error){
