@@ -103,7 +103,15 @@ const Home = () => {
             setEvents([...events, {
               title: "botMessage",
               start: eventDateTime
-          }]);}
+          }])
+            const todb=await axios.post('http://localhost:8000/events/schedule',{
+                title: "botMessage",
+                start: eventDateTime,
+                mail:userInfo.user.email,
+                teamId:userInfo.user.team,
+                id:userInfo.user.id
+            })
+          ;}
           if(response.data.type==='Reschedule Meeting'){
             const {date1,time1,date,time}=response.data.datee;
             if(date1.stringValue ==='' || time1.stringValue ==='' || date.stringValue ==='' ||time.stringValue ==='' ){
