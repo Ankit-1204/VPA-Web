@@ -9,19 +9,14 @@ const userSchema=new Schema({
     remainder:[{type:Schema.Types.ObjectId, ref:'events'}]
 })
 
-const eventsSchema=new Schema({
-    purpose:String,
-    date:Date,
-    users:[{type:Schema.Types.ObjectId, ref:'users'}]
-})
 
 const teamsSchema=new Schema({
     team:String,
     users:[{type:Schema.Types.ObjectId,ref:'users'}]
 })
 
-const User=mongoose.model('user',userSchema);
-const Event=mongoose.model('events',eventsSchema);
+const User=mongoose.model('users',userSchema);
 const Team=mongoose.model('teams',teamsSchema);
 
-module.exports={User,Event,Team};
+
+module.exports={User,Team};

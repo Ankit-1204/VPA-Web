@@ -271,6 +271,7 @@ const Home = () => {
                             <Avatar size="xl" name="User Name" src="https://bit.ly/broken-link" />
                             <Text mt={4} fontSize="xl">{userInfo.user.firstName+" "+ userInfo.user.lastName}</Text>
                             <Text mt={2} fontSize="md">{userInfo.user.email}</Text>
+                            <Text mt={2} fontSize="md">Team Id: {userInfo.team.team}</Text>
                         </Flex>
                     </DrawerBody>
 
