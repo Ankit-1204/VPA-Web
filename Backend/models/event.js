@@ -7,4 +7,4 @@ const eventsSchema=new Schema({
     users:[{type:Schema.Types.ObjectId, ref:'users'}]
 })
 const Event=mongoose.model('events',eventsSchema);
-module.exports=Event;
+module.exports={Event};

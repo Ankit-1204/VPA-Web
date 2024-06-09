@@ -4,6 +4,7 @@ const cors= require('cors')
 const {mongoose }=require('mongoose');
 const cookieParser= require('cookie-parser')
 const dialogRoute=require('./routes/dialogRoutes');
+const eventRoutes=require('./routes/eventRoutes')
 const authRouter =require("./routes/authRoutes")
 const bodyParser=require('body-parser')
 const app=express();
@@ -26,7 +27,7 @@ mongoose.connect(process.env.MONGO_URL)
 .catch((err)=>console.log("Not connected",err))
 
 
-
+app.use('/events',eventRoutes)
 app.use('/api',dialogRoute);
 app.use('/auth',authRouter);
 const port=8000;
