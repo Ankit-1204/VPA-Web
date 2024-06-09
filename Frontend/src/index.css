@@ -48,7 +48,11 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 .calendar-container {
-  width: 10%; 
+
+
+  width: 100%; /* Adjust the width as needed */
+
+
   align-items: center;
   padding-top: 50px; 
 
@@ -56,7 +60,9 @@ button:focus-visible {
 
 @media (min-width: 1024px) {
   .calendar-container {
+
     width: 10%;
+
   }
 }
 
@@ -116,5 +122,7 @@ button:focus-visible {
 }
 
 .fc-title {
+
   color: #0b47bf;
 } */
+
