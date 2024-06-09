@@ -133,7 +133,7 @@ const login= async(req,res)=>{
     }
     const teamId=user.team;
     const teamData = await Team.findOne({ team: teamId });
-    
+    const remainder=user.remainder;
     const firstName=user.firstName;
     const lastName=user.lastName;
     const hashed=user.password;
@@ -143,7 +143,7 @@ const login= async(req,res)=>{
     }
     else{
         console.log(process.env.JWT_SECRET);
-        jwt.sign({team:teamId,id:user._id,firstName:firstName,lastName:lastName,email:email},process.env.JWT_SECRET,{expiresIn: '15d'},(err,token)=>{
+        jwt.sign({team:teamId,id:user._id,firstName:firstName,lastName:lastName,email:email,remainder:remainder},process.env.JWT_SECRET,{expiresIn: '15d'},(err,token)=>{
             if(err) console.log( err);
             res.cookie('token',token).json({user,teamData})
            })
@@ -172,9 +172,11 @@ const profile= (req,res)=>{
                     console.log(err);
                   res.json(null)
                 }
+                const eventIds = user.remainder;
+                const events = await Event.find({ _id: { $in: eventIds } });
                 const teamData = await Team.findOne({ team: user.team });
                 console.log(user);
-                res.json({user:user,team:teamData})
+                res.json({user:user,team:teamData,events:events})
             })
         }
         else{

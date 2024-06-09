@@ -36,10 +36,10 @@ import axios from "axios";
 
 
 const Home = () => {
-    const {user,setUser,userInfo}=useContext(UserContext);
+    const {user,setUser,userInfo,setUserInfo}=useContext(UserContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState(userInfo.events);
     const [newEventTitle, setNewEventTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDateEvents, setSelectedDateEvents] = useState([]);
@@ -104,6 +104,7 @@ const Home = () => {
               title: "botMessage",
               start: eventDateTime
           }])
+          try{
             const todb=await axios.post('http://localhost:8000/events/schedule',{
                 title: "botMessage",
                 start: eventDateTime,
@@ -111,6 +112,19 @@ const Home = () => {
                 teamId:userInfo.user.team,
                 id:userInfo.user.id
             })
+            
+                const scheduledEvent = todb.data.event;
+    
+                setUserInfo(prevState => ({
+                    ...prevState,
+                    events: [...prevState.events, scheduledEvent]
+                }));
+    
+                
+            
+            }catch(error){
+                console.log(error);
+            }
           ;}
           if(response.data.type==='Reschedule Meeting'){
             const {date1,time1,date,time}=response.data.datee;

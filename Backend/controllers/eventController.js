@@ -14,8 +14,8 @@ const schedule= async(req,res)=>{
             users:[userID]
         })
         const user=await User.findOneAndUpdate(
-            {email:mail},
-            {team:teamID},
+            {email:mail,team: teamID},
+            
             {
                 $push:{remainder:event._id}
             }
@@ -25,7 +25,7 @@ const schedule= async(req,res)=>{
         }
 
         
-        res.status(200).send({ message: "Event scheduled and user updated", event, user });
+        res.status(200).send({ message: "Event scheduled and user updated", event });
     }catch(error){
         console.log(error);
     }
