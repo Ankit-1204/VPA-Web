@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -27,36 +27,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
+} 
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-h2{
-  font-size: 1.5em;
-  
-}
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-@keyframes slideIn {
-  0% { transform: translateX(-100%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
-}
-
-h1.animated {
-  animation: fadeIn 2s ease-in-out;
-}
-
-h2.animated {
-  animation: slideIn 2s ease-in-out;
-}
-
-button {
+ button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -66,7 +39,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-}
+} 
 button:hover {
   border-color: #646cff;
 }
@@ -76,7 +49,9 @@ button:focus-visible {
 }
 .calendar-container {
 
+
   width: 100%; /* Adjust the width as needed */
+
 
   align-items: center;
   padding-top: 50px; 
@@ -86,7 +61,7 @@ button:focus-visible {
 @media (min-width: 1024px) {
   .calendar-container {
 
-    width: 150%;
+    width: 10%;
 
   }
 }
@@ -112,21 +87,20 @@ button:focus-visible {
 }
 
 .calendar-box {
-  background-color: #dbd1d1;
+  background-color: #fdf4f4;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
 }
 
 .fc-toolbar {
-  background-color: #1a202c; /* Dark background for the toolbar */
+  background-color: #3c5586; 
   color: rgb(252, 245, 245);
   border-radius: 5px;
   padding: 10px;
 }
 
 .fc-button {
-  background-color: #3182ce; /* Custom button color */
+  background-color: #3182ce;
   color: white;
   border-radius: 5px;
   border: none;
@@ -137,18 +111,18 @@ button:focus-visible {
 }
 
 .fc-daygrid-event {
-  background-color: #4c8889; /* Custom event color */
+  background-color: #4c8889; 
   color: rgb(235, 231, 231);
   border-radius: 4px;
   padding: 2px 5px;
 }
 
 .fc-daygrid-day {
-  background-color: #2d71b4; /* Custom background color for days */
+  background-color: #2d80b4; 
 }
 
 .fc-title {
-  color: #1a202c; /* Custom text color for titles */
 
-}
+  color: #0b47bf;
+} */
 
