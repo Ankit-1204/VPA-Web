@@ -6,3 +6,4 @@ authRouter.post("/signup",signUp);
 authRouter.post("/login",login);
 
 module.exports=authRouter
+
