@@ -2,6 +2,7 @@
 // import FullCalendar from '@fullcalendar/react';
 // import dayGridPlugin from '@fullcalendar/daygrid';
 // import interactionPlugin from '@fullcalendar/interaction';
+// import timeGridPlugin from '@fullcalendar/timegrid';
 
 // import {
 //     ChakraProvider,
@@ -16,27 +17,17 @@
 //     ModalBody,
 //     ModalCloseButton,
 //     useDisclosure,
-//     Drawer,
-//     DrawerBody,
-//     DrawerFooter,
-//     DrawerHeader,
-//     DrawerOverlay,
-//     DrawerContent,
-//     DrawerCloseButton,
 //     Flex,
 //     Avatar,
 //     Text,
-//     Heading,
-//     useColorMode,
-//     IconButton
+//     IconButton,
+//     useColorMode
 // } from '@chakra-ui/react';
-// import { FiUser, FiMoon, FiSun } from 'react-icons/fi';
+// import { FiMoon, FiSun } from 'react-icons/fi';
 // import axios from "axios";
-
 
 // const Home = () => {
 //     const { isOpen, onOpen, onClose } = useDisclosure();
-//     const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
 //     const [events, setEvents] = useState([]);
 //     const [newEventTitle, setNewEventTitle] = useState('');
 //     const [selectedDate, setSelectedDate] = useState('');
@@ -171,42 +162,33 @@
 //         }
 //     };
 
-//     const handleLogout = () => {
-//         console.log("User logged out");
-//         // Add your logout logic here
-//     };
-
 //     return (
 //         <ChakraProvider>
-//             <Box width="100%" bg="gray.600" color="white" py={4} px={24}>
-//                 <Flex justifyContent="space-between" alignItems="center">
-//                     <Box>
-//                         <Heading size="lg">Welcome</Heading>
-//                         <Text fontSize="md">To your Virtual Personal Assistant</Text>
-//                     </Box>
-//                     <Button leftIcon={<FiUser />} colorScheme="teal" onClick={onDrawerOpen}>
-//                         Profile
-//                     </Button>
-//                 </Flex>
-//             </Box>
-
-//             <Flex justifyContent="center" mt={4} p={4}>
-//                 <Box width={{ base: '100%', md: '70%', lg: '60%' }} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} p={4} borderRadius="md" boxShadow="md">
-//                     <Flex mb={4}>
+//             <Flex height="100vh">
+//                 {/* Sidebar */}
+//                 <Box width="20%" bg="gray.700" color="white" p={4}>
+//                     <Box mb={4}>
+//                         <Text fontSize="lg" mb={2}>Add Event</Text>
 //                         <Input
-//                             placeholder="Add new event"
+//                             placeholder="Event Title"
 //                             value={newEventTitle}
 //                             onChange={(e) => setNewEventTitle(e.target.value)}
-//                             bg={colorMode === 'light' ? 'white' : 'gray.600'}
-//                             color={colorMode === 'light' ? 'black' : 'white'}
-//                             borderColor="gray.300"
-//                             _hover={{ borderColor: 'gray.400' }}
+//                             mb={2}
+//                             bg="gray.600"
+//                             color="white"
 //                         />
-//                         <Button ml={2} colorScheme="teal" onClick={handleInputEvent}>Add Event</Button>
-//                     </Flex>
+//                         <Button colorScheme="teal" onClick={handleInputEvent} mb={2}>Add</Button>
+//                     </Box>
+//                     <Box>
+//                         <Text fontSize="lg" mb={2}>Select Recipient</Text>
+//                         <Input placeholder="Recipient Name" bg="gray.600" color="white" />
+//                     </Box>
+//                 </Box>
 
+            
+//                 <Box width="80%" p={4} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} position="relative">
 //                     <FullCalendar
-//                         plugins={[dayGridPlugin, interactionPlugin]}
+//                         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
 //                         initialView="dayGridMonth"
 //                         events={events}
 //                         dateClick={handleClick}
@@ -228,82 +210,45 @@
 //                 </Box>
 //             </Flex>
 
-//             <Modal isOpen={isOpen} onClose={onClose}>
-//                 <ModalOverlay />
-//                 <ModalContent bg={colorMode === 'light' ? 'white' : 'gray.800'} color={colorMode === 'light' ? 'black' : 'white'}>
-
-//                     <ModalHeader>Add Event</ModalHeader>
-//                     <ModalCloseButton />
-//                     <ModalBody>
+//                    <Modal isOpen={isOpen} onClose={onClose}>
+//                <ModalOverlay />
+//                <ModalContent bg={colorMode === 'light' ? 'white' : 'gray.800'} color={colorMode === 'light' ? 'black' : 'white'}>
+//                 <ModalHeader>Add Event</ModalHeader>
+//                    <ModalCloseButton />
+//                    <ModalBody>
 //                         <Input
-//                             placeholder="Event Title"
-//                             value={newEventTitle}
-//                             onChange={(e) => setNewEventTitle(e.target.value)}
-//                             mb={4}
-//                             bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
-//                             color={colorMode === 'light' ? 'black' : 'white'}
-//                             borderColor="gray.300"
+//                              placeholder="Event Title"
+//                              value={newEventTitle}
+//                              onChange={(e) => setNewEventTitle(e.target.value)}
+//                              mb={4}
+//                              bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
+//                              color={colorMode === 'light' ? 'black' : 'white'}
+//                              borderColor="gray.300"
 //                             _hover={{ borderColor: 'gray.400' }}
 //                         />
-//                         {selectedDateEvents.length > 0 && (
+//                          {selectedDateEvents.length > 0 && (
 //                             <Box>
 //                                 <Text mb={2}>Events on {selectedDate}:</Text>
 //                                 <ul>
-//                                     {selectedDateEvents.map((event, index) => (
+//                                 {selectedDateEvents.map((event, index) => (
 //                                         <li key={index}>
-//                                             {event.title}
-//                                             <Button ml={2} colorScheme="red" size="xs" onClick={() => handleRemoveEvent(index)}>Remove</Button>
+//                                              {event.title}
+//                                              <Button ml={2} colorScheme="red" size="xs" onClick={() => handleRemoveEvent(index)}>Remove</Button>
 //                                         </li>
-//                                     ))}
-//                                 </ul>
-//                             </Box>
-//                         )}
-//                     </ModalBody>
-//                     <ModalFooter>
-//                         <Button colorScheme="teal" mr={3} onClick={handleAddEvent}>
-//                             Add Event
-//                         </Button>
-//                         <Button onClick={onClose}>Cancel</Button>
-//                     </ModalFooter>
-//                 </ModalContent>
-//             </Modal>
+//                                      ))}
+//                                  </ul>
+//                              </Box>
+//                              )}
+//                      </ModalBody>
+//                      <ModalFooter>
+//                          <Button colorScheme="teal" mr={3} onClick={handleAddEvent}>
+//                              Add Event
+//                          </Button>
+//                          <Button onClick={onClose}>Cancel</Button>
+//                      </ModalFooter>
+//                  </ModalContent>
+//              </Modal>  
 
-//             <Drawer isOpen={isDrawerOpen} placement="right" onClose={onDrawerClose}>
-//                 <DrawerOverlay />
-
-//                 <DrawerContent bg="gray.600" color="white">
-//                     <DrawerCloseButton />
-//                     <DrawerHeader>Profile</DrawerHeader>
-
-//                     <DrawerBody>
-//                         <Flex direction="column" alignItems="center" mt={4}>
-//                             <Avatar size="xl" name="User Name" src="https://bit.ly/broken-link" />
-//                             <Text mt={4} fontSize="xl">User Name</Text>
-//                             <Text mt={2} fontSize="md">user@example.com</Text>
-//                         </Flex>
-//                     </DrawerBody>
-
-//                     <DrawerFooter>
-//                         <Button colorScheme="teal" mr={3} onClick={handleLogout}>
-//                             Logout
-//                         </Button>
-//                         <Button colorScheme="teal" mr={3} onClick={onDrawerClose}>
-//                             Close
-//                         </Button>
-//                     </DrawerFooter>
-//                 </DrawerContent>
-//             </Drawer>
-
-//             <IconButton
-//                 icon={colorMode === 'light' ? <FiMoon /> : <FiSun />}
-//                 isRound
-//                 size="lg"
-//                 position="fixed"
-//                 bottom={4}
-//                 right={4}
-//                 onClick={toggleColorMode}
-//                 colorScheme="teal"
-//             />
 //         </ChakraProvider>
 //     );
 // };
@@ -313,7 +258,7 @@ import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-
+import timeGridPlugin from '@fullcalendar/timegrid';
 import {
     ChakraProvider,
     Button,
@@ -328,13 +273,10 @@ import {
     ModalCloseButton,
     useDisclosure,
     Flex,
-    Avatar,
     Text,
-    IconButton,
     useColorMode
 } from '@chakra-ui/react';
-import { FiMoon, FiSun } from 'react-icons/fi';
-import axios from "axios";
+import axios from 'axios';
 
 const Home = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -476,7 +418,7 @@ const Home = () => {
         <ChakraProvider>
             <Flex height="100vh">
                 {/* Sidebar */}
-                <Box width="20%" bg="gray.700" color="white" p={4}>
+                <Box width="20%" bg="gray.700" color="white" p={4} display="flex" flexDirection="column">
                     <Box mb={4}>
                         <Text fontSize="lg" mb={2}>Add Event</Text>
                         <Input
@@ -495,10 +437,10 @@ const Home = () => {
                     </Box>
                 </Box>
 
-            
-                <Box width="80%" p={4} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} position="relative">
+                {/* Main content */}
+                <Box width="80%" p={4} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} height="100vh" overflowY="auto">
                     <FullCalendar
-                        plugins={[dayGridPlugin, interactionPlugin]}
+                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         events={events}
                         dateClick={handleClick}
@@ -520,47 +462,47 @@ const Home = () => {
                 </Box>
             </Flex>
 
-                   <Modal isOpen={isOpen} onClose={onClose}>
-               <ModalOverlay />
-               <ModalContent bg={colorMode === 'light' ? 'white' : 'gray.800'} color={colorMode === 'light' ? 'black' : 'white'}>
-                <ModalHeader>Add Event</ModalHeader>
-                   <ModalCloseButton />
-                   <ModalBody>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent bg={colorMode === 'light' ? 'white' : 'gray.800'} color={colorMode === 'light' ? 'black' : 'white'}>
+                    <ModalHeader>Add Event</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
                         <Input
-                             placeholder="Event Title"
-                             value={newEventTitle}
-                             onChange={(e) => setNewEventTitle(e.target.value)}
-                             mb={4}
-                             bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
-                             color={colorMode === 'light' ? 'black' : 'white'}
-                             borderColor="gray.300"
+                            placeholder="Event Title"
+                            value={newEventTitle}
+                            onChange={(e) => setNewEventTitle(e.target.value)}
+                            mb={4}
+                            bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
+                            color={colorMode === 'light' ? 'black' : 'white'}
+                            borderColor="gray.300"
                             _hover={{ borderColor: 'gray.400' }}
                         />
-                         {selectedDateEvents.length > 0 && (
+                        {selectedDateEvents.length > 0 && (
                             <Box>
                                 <Text mb={2}>Events on {selectedDate}:</Text>
                                 <ul>
-                                {selectedDateEvents.map((event, index) => (
+                                    {selectedDateEvents.map((event, index) => (
                                         <li key={index}>
-                                             {event.title}
-                                             <Button ml={2} colorScheme="red" size="xs" onClick={() => handleRemoveEvent(index)}>Remove</Button>
+                                            {event.title}
+                                            <Button ml={2} colorScheme="red" size="xs" onClick={() => handleRemoveEvent(index)}>Remove</Button>
                                         </li>
-                                     ))}
-                                 </ul>
-                             </Box>
-                             )}
-                     </ModalBody>
-                     <ModalFooter>
-                         <Button colorScheme="teal" mr={3} onClick={handleAddEvent}>
-                             Add Event
-                         </Button>
-                         <Button onClick={onClose}>Cancel</Button>
-                     </ModalFooter>
-                 </ModalContent>
-             </Modal>  
-
+                                    ))}
+                                </ul>
+                            </Box>
+                        )}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button colorScheme="teal" mr={3} onClick={handleAddEvent}>
+                            Add Event
+                        </Button>
+                        <Button onClick={onClose}>Cancel</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </ChakraProvider>
     );
 };
 
 export default Home;
+
