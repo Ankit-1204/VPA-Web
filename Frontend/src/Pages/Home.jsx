@@ -495,13 +495,8 @@ const Home = () => {
                     </Box>
                 </Box>
 
-                {/* Main Content */}
+            
                 <Box width="80%" p={4} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} position="relative">
-                    {/* Profile in Circular Section */}
-                    <Box position="absolute" top={4} right={4}>
-                        <Avatar size="xl" name="User Name" src="/path/to/profile-pic.jpg" />
-                    </Box>
-
                     <FullCalendar
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
@@ -525,31 +520,45 @@ const Home = () => {
                 </Box>
             </Flex>
 
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent bg={colorMode === 'light' ? 'gray.500' : 'gray.700'} color="black">
-                    <ModalHeader>{selectedDate}</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                    {selectedDateEvents.length > 0 && (
-                        <Box>
+                   <Modal isOpen={isOpen} onClose={onClose}>
+               <ModalOverlay />
+               <ModalContent bg={colorMode === 'light' ? 'white' : 'gray.800'} color={colorMode === 'light' ? 'black' : 'white'}>
+                <ModalHeader>Add Event</ModalHeader>
+                   <ModalCloseButton />
+                   <ModalBody>
+                        <Input
+                             placeholder="Event Title"
+                             value={newEventTitle}
+                             onChange={(e) => setNewEventTitle(e.target.value)}
+                             mb={4}
+                             bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
+                             color={colorMode === 'light' ? 'black' : 'white'}
+                             borderColor="gray.300"
+                            _hover={{ borderColor: 'gray.400' }}
+                        />
+                         {selectedDateEvents.length > 0 && (
+                            <Box>
                                 <Text mb={2}>Events on {selectedDate}:</Text>
                                 <ul>
-                                    {selectedDateEvents.map((event, index) => (
+                                {selectedDateEvents.map((event, index) => (
                                         <li key={index}>
-                                            {event.title}
-                                            <Button ml={2} colorScheme="red" size="xs" onClick={() => handleRemoveEvent(index)}>Remove</Button>
+                                             {event.title}
+                                             <Button ml={2} colorScheme="red" size="xs" onClick={() => handleRemoveEvent(index)}>Remove</Button>
                                         </li>
-                                    ))}
-                                </ul>
-                            </Box>
-                        )}
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button colorScheme="teal" onClick={handleAddEvent}>Add Event</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+                                     ))}
+                                 </ul>
+                             </Box>
+                             )}
+                     </ModalBody>
+                     <ModalFooter>
+                         <Button colorScheme="teal" mr={3} onClick={handleAddEvent}>
+                             Add Event
+                         </Button>
+                         <Button onClick={onClose}>Cancel</Button>
+                     </ModalFooter>
+                 </ModalContent>
+             </Modal>  
+
         </ChakraProvider>
     );
 };
