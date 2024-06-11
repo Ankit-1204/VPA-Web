@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-
+import timeGridPlugin from '@fullcalendar/timegrid';
 import {
     ChakraProvider,
     Button,
@@ -20,28 +20,18 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
-    Drawer,
-    DrawerBody,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton,
     Flex,
+
     Avatar,
 
-    Text,
-    Heading,
-    useColorMode,
-    IconButton
-} from '@chakra-ui/react';
-import { FiUser, FiMoon, FiSun } from 'react-icons/fi';
-import axios from "axios";
 
+    Text,
+    useColorMode
+} from '@chakra-ui/react';
+import axios from 'axios';
 
 const Home = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
     const [events, setEvents] = useState([]);
     const [newEventTitle, setNewEventTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
@@ -180,13 +170,14 @@ const Home = () => {
         }
     };
 
-    const handleLogout = () => {
-        console.log("User logged out");
-        // Add your logout logic here
-    };
-
     return (
         <ChakraProvider>
+            <Flex height="100vh">
+                {/* Sidebar */}
+                <Box width="20%" bg="gray.700" color="white" p={4} display="flex" flexDirection="column">
+                    <Box mb={4}>
+                        <Text fontSize="lg" mb={2}>Add Event</Text>
+
             <Box width="100%" bg="gray.600" color="white" py={4} px={24}>
 
                 <Flex justifyContent="space-between" alignItems="center">
@@ -203,20 +194,27 @@ const Home = () => {
             <Flex justifyContent="center" mt={4} p={4}>
                 <Box width={{ base: '100%', md: '70%', lg: '60%' }} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} p={4} borderRadius="md" boxShadow="md">
                     <Flex mb={4}>
+
                         <Input
-                            placeholder="Add new event"
+                            placeholder="Event Title"
                             value={newEventTitle}
                             onChange={(e) => setNewEventTitle(e.target.value)}
-                            bg={colorMode === 'light' ? 'white' : 'gray.600'}
-                            color={colorMode === 'light' ? 'black' : 'white'}
-                            borderColor="gray.300"
-                            _hover={{ borderColor: 'gray.400' }}
+                            mb={2}
+                            bg="gray.600"
+                            color="white"
                         />
-                        <Button ml={2} colorScheme="teal" onClick={handleInputEvent}>Add Event</Button>
-                    </Flex>
+                        <Button colorScheme="teal" onClick={handleInputEvent} mb={2}>Add</Button>
+                    </Box>
+                    <Box>
+                        <Text fontSize="lg" mb={2}>Select Recipient</Text>
+                        <Input placeholder="Recipient Name" bg="gray.600" color="white" />
+                    </Box>
+                </Box>
 
+                {/* Main content */}
+                <Box width="80%" p={4} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} height="100vh" overflowY="auto">
                     <FullCalendar
-                        plugins={[dayGridPlugin, interactionPlugin]}
+                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         events={events}
                         dateClick={handleClick}
@@ -243,7 +241,6 @@ const Home = () => {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent bg={colorMode === 'light' ? 'white' : 'gray.800'} color={colorMode === 'light' ? 'black' : 'white'}>
-
                     <ModalHeader>Add Event</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
@@ -284,6 +281,7 @@ const Home = () => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+
 
             <Drawer isOpen={isDrawerOpen} placement="right" onClose={onDrawerClose}>
                 <DrawerOverlay />
@@ -326,10 +324,11 @@ const Home = () => {
                 onClick={toggleColorMode}
                 colorScheme="teal"
             />
+
         </ChakraProvider>
     );
 };
 
-export default Home;
+]
+ export default Home;
 
-// export default Home;
