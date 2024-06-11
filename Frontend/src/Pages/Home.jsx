@@ -1,3 +1,7 @@
+
+
+
+
 import React, { useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -17,6 +21,10 @@ import {
     ModalCloseButton,
     useDisclosure,
     Flex,
+
+    Avatar,
+
+
     Text,
     useColorMode
 } from '@chakra-ui/react';
@@ -29,6 +37,9 @@ const Home = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDateEvents, setSelectedDateEvents] = useState([]);
     const { colorMode, toggleColorMode } = useColorMode();
+
+    const { colorMode, toggleColorMode } = useColorMode();
+
 
     const handleClick = (e) => {
         const date = e.dateStr;
@@ -47,6 +58,7 @@ const Home = () => {
             onClose();
         }
     };
+
 
     const handleRemoveEvent = (index) => {
         const eventToRemove = selectedDateEvents[index];
@@ -165,6 +177,24 @@ const Home = () => {
                 <Box width="20%" bg="gray.700" color="white" p={4} display="flex" flexDirection="column">
                     <Box mb={4}>
                         <Text fontSize="lg" mb={2}>Add Event</Text>
+
+            <Box width="100%" bg="gray.600" color="white" py={4} px={24}>
+
+                <Flex justifyContent="space-between" alignItems="center">
+                    <Box>
+                        <Heading size="lg">Welcome</Heading>
+                        <Text fontSize="md">To your Virtual Personal Assistant</Text>
+                    </Box>
+                    <Button leftIcon={<FiUser />} colorScheme="teal" onClick={onDrawerOpen}>
+                        Profile
+                    </Button>
+                </Flex>
+            </Box>
+
+            <Flex justifyContent="center" mt={4} p={4}>
+                <Box width={{ base: '100%', md: '70%', lg: '60%' }} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} p={4} borderRadius="md" boxShadow="md">
+                    <Flex mb={4}>
+
                         <Input
                             placeholder="Event Title"
                             value={newEventTitle}
@@ -200,7 +230,9 @@ const Home = () => {
                             week: 'Week',
                             day: 'Day'
                         }}
+
                         eventColor={colorMode === 'light' ? '#3182CE' : '#90CDF4'}
+
                         height="auto"
                     />
                 </Box>
@@ -216,6 +248,7 @@ const Home = () => {
                             placeholder="Event Title"
                             value={newEventTitle}
                             onChange={(e) => setNewEventTitle(e.target.value)}
+
                             mb={4}
                             bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
                             color={colorMode === 'light' ? 'black' : 'white'}
@@ -227,26 +260,75 @@ const Home = () => {
                                 <Text mb={2}>Events on {selectedDate}:</Text>
                                 <ul>
                                     {selectedDateEvents.map((event, index) => (
+
                                         <li key={index}>
                                             {event.title}
                                             <Button ml={2} colorScheme="red" size="xs" onClick={() => handleRemoveEvent(index)}>Remove</Button>
                                         </li>
+
                                     ))}
                                 </ul>
                             </Box>
                         )}
                     </ModalBody>
                     <ModalFooter>
+
                         <Button colorScheme="teal" mr={3} onClick={handleAddEvent}>
                             Add Event
                         </Button>
                         <Button onClick={onClose}>Cancel</Button>
+
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+
+
+            <Drawer isOpen={isDrawerOpen} placement="right" onClose={onDrawerClose}>
+                <DrawerOverlay />
+
+
+                <DrawerContent bg="gray.600" color="white">
+
+                    <DrawerCloseButton />
+                    <DrawerHeader>Profile</DrawerHeader>
+
+                    <DrawerBody>
+                        <Flex direction="column" alignItems="center" mt={4}>
+                            <Avatar size="xl" name="User Name" src="https://bit.ly/broken-link" />
+                            <Text mt={4} fontSize="xl">User Name</Text>
+                            <Text mt={2} fontSize="md">user@example.com</Text>
+                        </Flex>
+                    </DrawerBody>
+
+                    <DrawerFooter>
+
+                        <Button colorScheme="teal" mr={3} onClick={handleLogout}>
+                            Logout
+                        </Button>
+                        <Button colorScheme="teal" mr={3} onClick={onDrawerClose}>
+
+                            Close
+                        </Button>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
+
+
+            <IconButton
+                icon={colorMode === 'light' ? <FiMoon /> : <FiSun />}
+                isRound
+                size="lg"
+                position="fixed"
+                bottom={4}
+                right={4}
+                onClick={toggleColorMode}
+                colorScheme="teal"
+            />
+
         </ChakraProvider>
     );
 };
 
+]
  export default Home;
 
