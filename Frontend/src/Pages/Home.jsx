@@ -1,6 +1,5 @@
 
 import { UserContext,UserContextProvider } from '../../context/context';
-import { EventContext,EventContextProvider } from '../../context/eventContext';
 import React, { useState ,useContext} from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -38,10 +37,9 @@ import axios from "axios";
 
 const Home = () => {
     const {user,setUser,userInfo,setUserInfo}=useContext(UserContext);
-    const {eventData,setEventData}=useContext(EventContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
-    const [events, setEvents] = useState(eventData);
+    const [events, setEvents] = useState(userInfo.events);
     const [newEventTitle, setNewEventTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDateEvents, setSelectedDateEvents] = useState([]);
@@ -106,7 +104,27 @@ const Home = () => {
               title: "botMessage",
               start: eventDateTime
           }])
-          
+          try{
+            const todb=await axios.post('http://localhost:8000/events/schedule',{
+                title: "botMessage",
+                start: eventDateTime,
+                mail:userInfo.user.email,
+                teamId:userInfo.user.team,
+                id:userInfo.user.id
+            })
+            
+                const scheduledEvent = todb.data.event;
+                console.log(7)
+                console.log(scheduledEvent)
+                setUserInfo(prevState => ({
+                    ...prevState,
+                    events: [...prevState.events, scheduledEvent]
+                }));
+                
+            
+            }catch(error){
+                console.log(error);
+            }
           ;}
           if(response.data.type==='Reschedule Meeting'){
             const {date1,time1,date,time}=response.data.datee;

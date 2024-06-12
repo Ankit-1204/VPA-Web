@@ -143,7 +143,7 @@ const login= async(req,res)=>{
     }
     else{
         console.log(process.env.JWT_SECRET);
-        jwt.sign({team:teamId,id:user._id,firstName:firstName,lastName:lastName,email:email,remainder:remainder},process.env.JWT_SECRET,{expiresIn: '15d'},(err,token)=>{
+        jwt.sign({team:teamId,id:user._id,firstName:firstName,lastName:lastName,email:email},process.env.JWT_SECRET,{expiresIn: '15d'},(err,token)=>{
             if(err) console.log( err);
             res.cookie('token',token).json({user,teamData})
            })
@@ -162,7 +162,7 @@ const logout=(req,res)=>{
     }
 };
 
-const profile= (req,res)=>{
+const profile= async (req,res)=>{
     try{
         const {token}= req.cookies;
         if(token){
@@ -172,7 +172,9 @@ const profile= (req,res)=>{
                     console.log(err);
                   res.json(null)
                 }
-                const eventIds = user.remainder;
+                const useId = user.id;
+                const userr = await User.findById(useId);
+                const eventIds = userr.remainder;
                 const events = await Event.find({ _id: { $in: eventIds } });
                 const teamData = await Team.findOne({ team: user.team });
                 console.log(user);
