@@ -24,8 +24,8 @@ const schedule= async(req,res)=>{
             return res.status(404).send({ message: "User not found" });
         }
 
-        
-        res.status(200).send({ message: "Event scheduled and user updated", event });
+        console.log(12)
+        res.status(200).send({ message: "Event scheduled and user updated", event:event });
     }catch(error){
         console.log(error);
     }
