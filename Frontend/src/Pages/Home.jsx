@@ -18,8 +18,15 @@ import {
     useDisclosure,
     Flex,
     Text,
-    useColorMode
+    useColorMode,
+    Checkbox, // Import Checkbox from Chakra UI
+    Avatar,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem
 } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 
 const Home = () => {
@@ -29,6 +36,24 @@ const Home = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDateEvents, setSelectedDateEvents] = useState([]);
     const { colorMode, toggleColorMode } = useColorMode();
+    const [selectedRecipients, setSelectedRecipients] = useState([]); // State for multiple recipients
+
+    const recipients = [
+        'John Doe',
+        'Jane Smith',
+        'Alice Johnson',
+        'Bob Brown',
+        'Charlie Davis'
+    ];
+
+    // Function to handle checkbox change
+    const handleRecipientChange = (recipient) => {
+        if (selectedRecipients.includes(recipient)) {
+            setSelectedRecipients(selectedRecipients.filter(r => r !== recipient));
+        } else {
+            setSelectedRecipients([...selectedRecipients, recipient]);
+        }
+    };
 
     const handleClick = (e) => {
         const date = e.dateStr;
@@ -57,105 +82,7 @@ const Home = () => {
     };
 
     const handleInputEvent = async () => {
-        const msg = newEventTitle;
-        setNewEventTitle('');
-        console.log(msg);
-        try {
-            const response = await axios.post('http://localhost:8000/api/webhook', {
-                query: msg,
-                sessionId: '123465',
-            });
-            console.log('sent and received');
-            console.log(response.data.type);
-            if (response.data.type === 'Schedule Meeting') {
-                const { date, time } = response.data.datee;
-
-                const dateObject = new Date(date.stringValue);
-                const year = dateObject.getFullYear();
-                const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-                const day = dateObject.getDate().toString().padStart(2, '0');
-                const dat = `${year}-${month}-${day}`;
-
-                const timeObject = new Date(time.stringValue.substring(0, 19));
-
-                const hours = timeObject.getHours().toString().padStart(2, '0');
-                const minutes = timeObject.getMinutes().toString().padStart(2, '0');
-                const seconds = timeObject.getSeconds().toString().padStart(2, '0');
-                const tim = `${hours}:${minutes}:${seconds}`;
-                const eventDateTime = new Date(`${dat}T${tim}`);
-
-                setEvents([...events, {
-                    title: "botMessage",
-                    start: eventDateTime
-                }]);
-            }
-            if (response.data.type === 'Reschedule Meeting') {
-                const { date1, time1, date, time } = response.data.datee;
-                if (date1.stringValue === '' || time1.stringValue === '' || date.stringValue === '' || time.stringValue === '') {
-                    console.log("please provide data correctly");
-                    return {
-                        msg: "please provide data correctly"
-                    }
-                }
-                const dateOld = new Date(date.stringValue);
-                const year = dateOld.getFullYear();
-                const month = (dateOld.getMonth() + 1).toString().padStart(2, '0');
-                const day = dateOld.getDate().toString().padStart(2, '0');
-                const dat = `${year}-${month}-${day}`;
-
-                const timeOld = new Date(time.stringValue.substring(0, 19));
-
-                const hours = timeOld.getHours().toString().padStart(2, '0');
-                const minutes = timeOld.getMinutes().toString().padStart(2, '0');
-                const seconds = timeOld.getSeconds().toString().padStart(2, '0');
-                const tim = `${hours}:${minutes}:${seconds}`;
-                const oldDateTime = new Date(`${dat}T${tim}`);
-
-                const dateNew = new Date(date1.stringValue);
-                const nyear = dateNew.getFullYear();
-                const nmonth = (dateNew.getMonth() + 1).toString().padStart(2, '0');
-                const nday = dateNew.getDate().toString().padStart(2, '0');
-                const ndat = `${nyear}-${nmonth}-${nday}`;
-
-                const timeNew = new Date(time1.stringValue.substring(0, 19));
-
-                const nhours = timeNew.getHours().toString().padStart(2, '0');
-                const nminutes = timeNew.getMinutes().toString().padStart(2, '0');
-                const nseconds = timeNew.getSeconds().toString().padStart(2, '0');
-                const ntim = `${nhours}:${nminutes}:${nseconds}`;
-                const newDateTime = new Date(`${ndat}T${ntim}`);
-
-                setEvents(events.map(event => {
-                    console.log(event.start);
-                    console.log(oldDateTime);
-                    console.log(event.start.toISOString() === oldDateTime.toISOString());
-                    if (event.start.toISOString() === oldDateTime.toISOString()) {
-                        return { ...event, start: newDateTime };
-                    }
-                    return event;
-                }));
-
-            }
-            if (response.data.type === 'Delete Meeting') {
-                const { date, time } = response.data.datee;
-                const dateObject = new Date(date.stringValue);
-                const year = dateObject.getFullYear();
-                const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-                const day = dateObject.getDate().toString().padStart(2, '0');
-                const dat = `${year}-${month}-${day}`;
-
-                const timeObject = new Date(time.stringValue.substring(0, 19));
-
-                const hours = timeObject.getHours().toString().padStart(2, '0');
-                const minutes = timeObject.getMinutes().toString().padStart(2, '0');
-                const seconds = timeObject.getSeconds().toString().padStart(2, '0');
-                const tim = `${hours}:${minutes}:${seconds}`;
-                const eventDateTime = new Date(`${dat}T${tim}`);
-                setEvents(events.filter(event => event.start.toISOString() !== eventDateTime.toISOString()));
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        // Handle input event logic here
     };
 
     return (
@@ -176,13 +103,36 @@ const Home = () => {
                         <Button colorScheme="teal" onClick={handleInputEvent} mb={2}>Add</Button>
                     </Box>
                     <Box>
-                        <Text fontSize="lg" mb={2}>Select Recipient</Text>
-                        <Input placeholder="Recipient Name" bg="gray.600" color="white" />
+                        <Text fontSize="lg" mb={2}>Select Recipient(s)</Text>
+                        {recipients.map((recipient, index) => (
+                            <Checkbox
+                                key={index}
+                                isChecked={selectedRecipients.includes(recipient)}
+                                onChange={() => handleRecipientChange(recipient)}
+                                colorScheme="teal"
+                                mb={2}
+                            >
+                                {recipient}
+                            </Checkbox>
+                        ))}
                     </Box>
                 </Box>
 
                 {/* Main content */}
                 <Box width="80%" p={4} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} height="100vh" overflowY="auto">
+                    <Flex justifyContent="space-between" alignItems="center" mb={4}>
+                        <Text fontSize="2xl">Calendar</Text>
+                        <Menu>
+                            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} zIndex="1000">
+                                <Avatar size="sm" name="User Profile" />
+                            </MenuButton>
+                            <MenuList zIndex="popover">
+                                <MenuItem>Profile</MenuItem>
+                                <MenuItem>Settings</MenuItem>
+                                <MenuItem>Logout</MenuItem>
+                            </MenuList>
+                        </Menu>
+                    </Flex>
                     <FullCalendar
                         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
@@ -247,6 +197,5 @@ const Home = () => {
         </ChakraProvider>
     );
 };
- export default Home;
-
+export default Home;
 
