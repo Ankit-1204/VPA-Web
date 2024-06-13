@@ -30,5 +30,11 @@ const schedule= async(req,res)=>{
         console.log(error);
     }
 }
+const deleteSchedule= async (req,res)=>{
+    try{
 
+    }catch(err){
+        console.log(err);
+    }
+}
 module.exports={schedule};

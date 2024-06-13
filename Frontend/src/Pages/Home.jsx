@@ -44,7 +44,8 @@ const Home = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedDateEvents, setSelectedDateEvents] = useState([]);
     const { colorMode, toggleColorMode } = useColorMode();
-
+    
+  
     const handleClick = (e) => {
         const date = e.dateStr;
         setSelectedDate(date);
@@ -100,10 +101,7 @@ const Home = () => {
             const tim = `${hours}:${minutes}:${seconds}`;
             const eventDateTime = new Date(`${dat}T${tim}`);
             
-            setEvents([...events, {
-              title: "botMessage",
-              start: eventDateTime
-          }])
+        
           try{
             const todb=await axios.post('http://localhost:8000/events/schedule',{
                 title: "botMessage",
@@ -120,7 +118,7 @@ const Home = () => {
                     ...prevState,
                     events: [...prevState.events, scheduledEvent]
                 }));
-                
+                    setEvents([...events, scheduledEvent]);
             
             }catch(error){
                 console.log(error);
@@ -166,7 +164,7 @@ const Home = () => {
               console.log(event.start);
               console.log(oldDateTime);
               console.log(event.start.toISOString() === oldDateTime.toISOString());
-              if (event.start.toISOString() === oldDateTime.toISOString()) {
+              if (event.date.toISOString() === oldDateTime.toISOString()) {
                   return { ...event, start:newDateTime };
               }
               return event;
@@ -188,7 +186,14 @@ const Home = () => {
             const seconds = timeObject.getSeconds().toString().padStart(2, '0');
             const tim = `${hours}:${minutes}:${seconds}`;
             const eventDateTime = new Date(`${dat}T${tim}`);
-            setEvents(events.filter(event => event.start.toISOString()!== eventDateTime.toISOString()));
+            console.log(eventDateTime.toISOString());
+           
+            setEvents(events.filter(event => event.date!== eventDateTime.toISOString()));
+            console.log(events);
+            const eventToDelete = userInfo.events.find(event => {
+                return event.date === eventDateTime.toISOString();
+            });
+            console.log(eventToDelete);
           }
       } catch (error) {
           console.error('Error:', error);
