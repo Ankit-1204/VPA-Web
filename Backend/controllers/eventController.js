@@ -32,9 +32,19 @@ const schedule= async(req,res)=>{
 }
 const deleteSchedule= async (req,res)=>{
     try{
+        console.log(req.body)
+        const {eventid,userid}=req.body;
+        console.log(eventid)
+        console.log(userid)
+        await Event.findByIdAndDelete(eventid);
 
+
+        await User.updateMany(
+            { _id: { $in: userid } },
+            { $pull: { remainder: eventid } }
+        );
     }catch(err){
         console.log(err);
     }
 }
-module.exports={schedule};
+module.exports={schedule,deleteSchedule};

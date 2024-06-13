@@ -114,10 +114,10 @@ const Home = () => {
                 const scheduledEvent = todb.data.event;
                 console.log(7)
                 console.log(scheduledEvent)
-                setUserInfo(prevState => ({
-                    ...prevState,
-                    events: [...prevState.events, scheduledEvent]
-                }));
+                // setUserInfo(prevState => ({
+                //     ...prevState,
+                //     events: [...prevState.events, scheduledEvent]
+                // }));
                     setEvents([...events, scheduledEvent]);
             
             }catch(error){
@@ -160,15 +160,49 @@ const Home = () => {
             const ntim = `${nhours}:${nminutes}:${nseconds}`;
             const newDateTime = new Date(`${ndat}T${ntim}`);  
     
-            setEvents(events.map(event => {
-              console.log(event.start);
-              console.log(oldDateTime);
-              console.log(event.start.toISOString() === oldDateTime.toISOString());
-              if (event.date.toISOString() === oldDateTime.toISOString()) {
-                  return { ...event, start:newDateTime };
-              }
-              return event;
-          }));
+        //     setEvents(events.map(event => {
+        //       console.log(event.start);
+        //       console.log(oldDateTime);
+        //       console.log(event.start.toISOString() === oldDateTime.toISOString());
+        //       if (event.date.toISOString() === oldDateTime.toISOString()) {
+        //           return { ...event, start:newDateTime };
+        //       }
+        //       return event;
+        //   }));
+        try{
+            const todb=await axios.post('http://localhost:8000/events/schedule',{
+                title: "botMessage",
+                start: newDateTime,
+                mail:userInfo.user.email,
+                teamId:userInfo.user.team,
+                id:userInfo.user.id
+            })
+            
+                const scheduledEvent = todb.data.event;
+                console.log(7)
+                console.log(scheduledEvent)
+                // setUserInfo(prevState => ({
+                //     ...prevState,
+                //     events: [...prevState.events, scheduledEvent]
+                // }));
+                    setEvents([...events, scheduledEvent]);
+            
+            }catch(error){
+                console.log(error);
+            }
+        setEvents(events.filter(event => event.date!== oldDateTime.toISOString()));
+            const eventToDelete = userInfo.events.find(event => {
+                return event.date === oldDateTime.toISOString();
+            });
+            console.log(eventToDelete);
+            try {
+                await axios.post('http://localhost:8000/events/delete',{
+                    eventid:eventToDelete._id,
+                    userid:eventToDelete.users
+                })
+            } catch (error) {
+                console.error(error);
+            }
             
           }
           if(response.data.type==='Delete Meeting'){
@@ -189,11 +223,18 @@ const Home = () => {
             console.log(eventDateTime.toISOString());
            
             setEvents(events.filter(event => event.date!== eventDateTime.toISOString()));
-            console.log(events);
             const eventToDelete = userInfo.events.find(event => {
                 return event.date === eventDateTime.toISOString();
             });
             console.log(eventToDelete);
+            try {
+                await axios.post('http://localhost:8000/events/delete',{
+                    eventid:eventToDelete._id,
+                    userid:eventToDelete.users
+                })
+            } catch (error) {
+                console.error(error);
+            }
           }
       } catch (error) {
           console.error('Error:', error);
