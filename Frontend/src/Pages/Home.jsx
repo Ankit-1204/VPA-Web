@@ -181,10 +181,10 @@ const Home = () => {
                 const scheduledEvent = todb.data.event;
                 console.log(7)
                 console.log(scheduledEvent)
-                // setUserInfo(prevState => ({
-                //     ...prevState,
-                //     events: [...prevState.events, scheduledEvent]
-                // }));
+                setUserInfo(prevState => ({
+                    ...prevState,
+                    events: [...prevState.events, scheduledEvent]
+                }));
                     setEvents([...events, scheduledEvent]);
             
             }catch(error){
@@ -223,8 +223,8 @@ const Home = () => {
             console.log(eventDateTime.toISOString());
            
             setEvents(events.filter(event => event.date!== eventDateTime.toISOString()));
-            const eventToDelete = userInfo.events.find(event => {
-                return event.date === eventDateTime.toISOString();
+            const eventsToDelete = userInfo.events.filter(event => {
+                return new Date(event.date).toISOString() === eventDateTime.toISOString();
             });
             console.log(eventToDelete);
             try {
