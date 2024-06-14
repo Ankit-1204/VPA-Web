@@ -177,8 +177,10 @@ const profile= async (req,res)=>{
                 const eventIds = userr.remainder;
                 const events = await Event.find({ _id: { $in: eventIds } });
                 const teamData = await Team.findOne({ team: user.team });
+                const usersInTeam = await User.find({ team: user.team }, 'firstName'); 
+
                 console.log(user);
-                res.json({user:user,team:teamData,events:events})
+                res.json({user:user,team:teamData,events:events,usersInTeam:usersInTeam})
             })
         }
         else{
