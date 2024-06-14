@@ -34,6 +34,7 @@ const Home = () => {
     const [events, setEvents] = useState([]);
     const [newEventTitle, setNewEventTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
+    const [selectedColor, setSelectedColor] = useState('');
     const [selectedDateEvents, setSelectedDateEvents] = useState([]);
     const { colorMode, toggleColorMode } = useColorMode();
     const [selectedRecipients, setSelectedRecipients] = useState([]); // State for multiple recipients
@@ -70,15 +71,15 @@ const Home = () => {
 
     const handleAddEvent = () => {
         if (newEventTitle) {
-            const newEvent = { title: newEventTitle, date: selectedDate };
+            const newEvent = { title: newEventTitle, date: selectedDate, color: selectedColor };
             setEvents([...events, newEvent]);
             setSelectedDateEvents([...selectedDateEvents, newEvent]);
             setNewEventTitle('');
-            setSelectedRecipients([]); // Reset selected recipients
+            setSelectedRecipients([]);
+            setSelectedColor('');
             onClose();
         }
     };
-
     const handleRemoveEvent = (index) => {
         const eventToRemove = selectedDateEvents[index];
         const filteredEvents = events.filter(event => !(event.date === eventToRemove.date && event.title === eventToRemove.title));
@@ -232,8 +233,7 @@ const Home = () => {
                                 <Avatar size="sm" name="User Profile" />
                             </MenuButton>
                             <MenuList zIndex="popover">
-                                <MenuItem>Profile</MenuItem>
-                                <MenuItem>Settings</MenuItem>
+                                <MenuItem>abc@gmail.com</MenuItem>
                                 <MenuItem>Logout</MenuItem>
                             </MenuList>
                         </Menu>
@@ -277,6 +277,22 @@ const Home = () => {
                             borderColor="gray.300"
                             _hover={{ borderColor: 'gray.400' }}
                         />
+                        <Text mb={2}>Select Color:</Text>
+                        <Flex mb={4}>
+                            {colorOptions.map((colorOption, index) => (
+                                <Box
+                                    key={index}
+                                    width="24px"
+                                    height="24px"
+                                    borderRadius="50%"
+                                    bg={colorOption.colorCode}
+                                    cursor="pointer"
+                                    border={selectedColor === colorOption.colorCode ? '2px solid black' : '2px solid transparent'}
+                                    onClick={() => setSelectedColor(colorOption.colorCode)}
+                                    mr={2}
+                                />
+                            ))}
+                        </Flex>
                         {selectedDateEvents.length > 0 && (
                             <Box>
                                 <Text mb={2}>Events on {selectedDate}:</Text>
@@ -302,7 +318,4 @@ const Home = () => {
         </ChakraProvider>
     );
 };
-
 export default Home;
-
-
