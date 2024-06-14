@@ -31,20 +31,26 @@ const schedule= async(req,res)=>{
     }
 }
 const deleteSchedule= async (req,res)=>{
-    try{
-        console.log(req.body)
-        const {eventid,userid}=req.body;
-        console.log(eventid)
-        console.log(userid)
-        await Event.findByIdAndDelete(eventid);
+    try {
+        const { event } = req.body;
 
+        for (const ev of event) {
+            const eventId = ev._id;
+            const userIds = ev.users;
 
-        await User.updateMany(
-            { _id: { $in: userid } },
-            { $pull: { remainder: eventid } }
-        );
-    }catch(err){
-        console.log(err);
+            await Event.findByIdAndDelete(eventId);
+
+            for (const userId of userIds) {
+                await User.findByIdAndUpdate(userId, {
+                    $pull: { events: eventId }
+                });
+            }
+        }
+
+        res.status(200).json({ message: 'Events and user references deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting schedule:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 }
 module.exports={schedule,deleteSchedule};

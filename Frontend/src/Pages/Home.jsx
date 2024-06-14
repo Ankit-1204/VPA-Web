@@ -114,10 +114,10 @@ const Home = () => {
                 const scheduledEvent = todb.data.event;
                 console.log(7)
                 console.log(scheduledEvent)
-                // setUserInfo(prevState => ({
-                //     ...prevState,
-                //     events: [...prevState.events, scheduledEvent]
-                // }));
+                setUserInfo(prevState => ({
+                    ...prevState,
+                    events: [...prevState.events, scheduledEvent]
+                }));
                     setEvents([...events, scheduledEvent]);
             
             }catch(error){
@@ -169,6 +169,11 @@ const Home = () => {
         //       }
         //       return event;
         //   }));
+
+        const eventToDelete = userInfo.events.filter(event => {
+            return new Date(event.date).toISOString() === oldDateTime.toISOString();
+        });
+        if(eventToDelete && eventToDelete.length > 0){
         try{
             const todb=await axios.post('http://localhost:8000/events/schedule',{
                 title: "botMessage",
@@ -190,20 +195,28 @@ const Home = () => {
             }catch(error){
                 console.log(error);
             }
-        setEvents(events.filter(event => event.date!== oldDateTime.toISOString()));
-            const eventToDelete = userInfo.events.find(event => {
-                return event.date === oldDateTime.toISOString();
-            });
+        
+            
             console.log(eventToDelete);
             try {
                 await axios.post('http://localhost:8000/events/delete',{
-                    eventid:eventToDelete._id,
-                    userid:eventToDelete.users
+                    event:eventToDelete
                 })
+                setEvents(prevEvents => 
+                    prevEvents.filter(event => 
+                        !eventToDelete.some(ev => ev._id === event._id)
+                    )
+                );
+                setUserInfo(prevState => ({
+                    ...prevState,
+                    events: prevState.events.filter(event => 
+                        !eventToDelete.some(ev => ev._id === event._id)
+                    )
+                }));
             } catch (error) {
                 console.error(error);
             }
-            
+            }
           }
           if(response.data.type==='Delete Meeting'){
             const {date,time}=response.data.datee;
@@ -222,16 +235,26 @@ const Home = () => {
             const eventDateTime = new Date(`${dat}T${tim}`);
             console.log(eventDateTime.toISOString());
            
-            setEvents(events.filter(event => event.date!== eventDateTime.toISOString()));
-            const eventsToDelete = userInfo.events.filter(event => {
+            // setEvents(events.filter(event => event.date!== eventDateTime.toISOString()));
+            const eventToDelete = userInfo.events.filter(event => {
                 return new Date(event.date).toISOString() === eventDateTime.toISOString();
             });
             console.log(eventToDelete);
             try {
                 await axios.post('http://localhost:8000/events/delete',{
-                    eventid:eventToDelete._id,
-                    userid:eventToDelete.users
+                    event:eventToDelete
                 })
+                setEvents(prevEvents => 
+                    prevEvents.filter(event => 
+                        !eventToDelete.some(ev => ev._id === event._id)
+                    )
+                );
+                setUserInfo(prevState => ({
+                    ...prevState,
+                    events: prevState.events.filter(event => 
+                        !eventToDelete.some(ev => ev._id === event._id)
+                    )
+                }));
             } catch (error) {
                 console.error(error);
             }
