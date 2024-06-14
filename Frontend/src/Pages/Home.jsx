@@ -4,6 +4,7 @@ import React, { useState ,useContext} from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import timeGridPlugin from '@fullcalendar/timegrid';
 import {
     ChakraProvider,
     Button,
@@ -17,35 +18,54 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
-    Drawer,
-    DrawerBody,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton,
     Flex,
-    Avatar,
     Text,
-    Heading,
     useColorMode,
-    IconButton
+    Checkbox,
+    Avatar,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem
 } from '@chakra-ui/react';
 import { FiUser, FiMoon, FiSun } from 'react-icons/fi';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import axios from "axios";
 
 
 const Home = () => {
-    const {user,setUser,userInfo,setUserInfo}=useContext(UserContext);
+    const {setUser,userInfo,setUserInfo}=useContext(UserContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
     const [events, setEvents] = useState(userInfo.events);
     const [newEventTitle, setNewEventTitle] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
+    const [selectedColor, setSelectedColor] = useState('');
     const [selectedDateEvents, setSelectedDateEvents] = useState([]);
     const { colorMode, toggleColorMode } = useColorMode();
-    
+    const [selectedRecipients, setSelectedRecipients] = useState([]); 
   
+    const recipients = [
+        'John Doe',
+        'Jane Smith',
+        'Alice Johnson',
+        'Bob Brown',
+        'Charlie Davis'
+    ];
+    const colorOptions = [
+        { name: 'Red', colorCode: '#E57373' },
+        { name: 'Purple', colorCode: '#D8BFD8' },
+        { name: 'Blue', colorCode: '#64B5F6' }
+    ];
+    // Function to handle checkbox change
+    const handleRecipientChange = (recipient) => {
+        if (selectedRecipients.includes(recipient)) {
+            setSelectedRecipients(selectedRecipients.filter(r => r !== recipient));
+        } else {
+            setSelectedRecipients([...selectedRecipients, recipient]);
+        }
+    };
+
     const handleClick = (e) => {
         const date = e.dateStr;
         setSelectedDate(date);
@@ -56,13 +76,23 @@ const Home = () => {
 
     const handleAddEvent = () => {
         if (newEventTitle) {
-            const newEvent = { title: newEventTitle, date: selectedDate };
+            const newEvent = { title: newEventTitle, date: selectedDate, color: selectedColor };
             setEvents([...events, newEvent]);
             setSelectedDateEvents([...selectedDateEvents, newEvent]);
             setNewEventTitle('');
+            setSelectedRecipients([]);
+            setSelectedColor('');
             onClose();
         }
     };
+    const handleRemoveEvent = (index) => {
+        const eventToRemove = selectedDateEvents[index];
+        const filteredEvents = events.filter(event => !(event.date === eventToRemove.date && event.title === eventToRemove.title));
+        const filteredSelectedDateEvents = selectedDateEvents.filter((_, i) => i !== index);
+        setEvents(filteredEvents);
+        setSelectedDateEvents(filteredSelectedDateEvents);
+    };
+
     const handleLogOut= async()=>{
         try{
             const response=await axios.post('http://localhost:8000/auth/logout',{});
@@ -265,35 +295,55 @@ const Home = () => {
     };
     return (
         <ChakraProvider>
-            <Box width="100%" bg="blue.900" color="white" py={4} px={24}>
-                <Flex justifyContent="space-between" alignItems="center">
-                    <Box>
-                        <Heading size="lg">Welcome</Heading>
-                        <Text fontSize="md">To your Virtual Personal Assistant</Text>
-                    </Box>
-                    <Button leftIcon={<FiUser />} colorScheme="teal" onClick={onDrawerOpen}>
-                        Profile
-                    </Button>
-                </Flex>
-            </Box>
-
-            <Flex justifyContent="center" mt={4} p={4}>
-                <Box width={{ base: '100%', md: '70%', lg: '60%' }} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} p={4} borderRadius="md" boxShadow="md">
-                    <Flex mb={4}>
+            <Flex height="100vh">
+                {/* Sidebar */}
+                <Box width="20%" bg="gray.700" color="white" p={4} display="flex" flexDirection="column">
+                    <Box mb={4}>
+                        <Text fontSize="lg" mb={2}>Add Event</Text>
                         <Input
-                            placeholder="Add new event"
+                            placeholder="Event Title"
                             value={newEventTitle}
                             onChange={(e) => setNewEventTitle(e.target.value)}
-                            bg={colorMode === 'light' ? 'white' : 'gray.600'}
-                            color={colorMode === 'light' ? 'black' : 'white'}
-                            borderColor="gray.300"
-                            _hover={{ borderColor: 'gray.400' }}
+                            mb={2}
+                            bg="gray.600"
+                            color="white"
                         />
-                        <Button ml={2} colorScheme="teal" onClick={handleInputEvent}>Add Event</Button>
-                    </Flex>
+                        <Button colorScheme="teal" onClick={handleInputEvent} mb={2}>Add</Button>
+                    </Box>
+                    <Box>
+                        <Text fontSize="lg" mb={2}>Select Recipient(s)</Text>
+                        {recipients.map((recipient, index) => (
+                            <Checkbox
+                                key={index}
+                                isChecked={selectedRecipients.includes(recipient)}
+                                onChange={() => handleRecipientChange(recipient)}
+                                colorScheme="teal"
+                                mb={2}
+                            >
+                                {recipient}
+                            </Checkbox>
+                        ))}
+                    </Box>
+                </Box>
 
+                {/* Main content */}
+                <Box width="80%" p={4} bg={colorMode === 'light' ? 'gray.100' : 'gray.700'} height="100vh" overflowY="auto">
+                    <Flex justifyContent="space-between" alignItems="center" mb={4}>
+                        <Text fontSize="2xl">Calendar</Text>
+                        <Menu>
+                            <MenuButton as={Button} rightIcon={<ChevronDownIcon />} zIndex="1000">
+                                <Avatar size="sm" name="User Profile" />
+                            </MenuButton>
+                            <MenuList zIndex="popover">
+                                <MenuItem>{userInfo.user.email}</MenuItem>
+                                <Button variant="link" onClick={handleLogOut}>
+                                            Logout
+                                </Button>
+                            </MenuList>
+                        </Menu>
+                    </Flex>
                     <FullCalendar
-                        plugins={[dayGridPlugin, interactionPlugin]}
+                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         events={events}
                         dateClick={handleClick}
@@ -309,7 +359,7 @@ const Home = () => {
                             week: 'Week',
                             day: 'Day'
                         }}
-                        eventColor='#3182CE'
+                        eventColor={colorMode === 'light' ? '#3182CE' : '#90CDF4'}
                         height="auto"
                     />
                 </Box>
@@ -331,12 +381,31 @@ const Home = () => {
                             borderColor="gray.300"
                             _hover={{ borderColor: 'gray.400' }}
                         />
+                        <Text mb={2}>Select Color:</Text>
+                        <Flex mb={4}>
+                            {colorOptions.map((colorOption, index) => (
+                                <Box
+                                    key={index}
+                                    width="24px"
+                                    height="24px"
+                                    borderRadius="50%"
+                                    bg={colorOption.colorCode}
+                                    cursor="pointer"
+                                    border={selectedColor === colorOption.colorCode ? '2px solid black' : '2px solid transparent'}
+                                    onClick={() => setSelectedColor(colorOption.colorCode)}
+                                    mr={2}
+                                />
+                            ))}
+                        </Flex>
                         {selectedDateEvents.length > 0 && (
                             <Box>
                                 <Text mb={2}>Events on {selectedDate}:</Text>
                                 <ul>
                                     {selectedDateEvents.map((event, index) => (
-                                        <li key={index}>{event.start}</li>
+                                        <li key={index}>
+                                            {event.title}
+                                            <Button ml={2} colorScheme="red" size="xs" onClick={() => handleRemoveEvent(index)}>Remove</Button>
+                                        </li>
                                     ))}
                                 </ul>
                             </Box>
@@ -350,40 +419,6 @@ const Home = () => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-
-            <Drawer isOpen={isDrawerOpen} placement="right" onClose={onDrawerClose}>
-                <DrawerOverlay />
-                <DrawerContent bg="blue.900" color="white">
-                    <DrawerCloseButton />
-                    <DrawerHeader>Profile</DrawerHeader>
-
-                    <DrawerBody>
-                        <Flex direction="column" alignItems="center" mt={4}>
-                            <Avatar size="xl" name="User Name" src="https://bit.ly/broken-link" />
-                            <Text mt={4} fontSize="xl">{userInfo.user.firstName+" "+ userInfo.user.lastName}</Text>
-                            <Text mt={2} fontSize="md">{userInfo.user.email}</Text>
-                            <Text mt={2} fontSize="md">Team Id: {userInfo.team.team}</Text>
-                        </Flex>
-                    </DrawerBody>
-
-                    <DrawerFooter>
-                        <Button colorScheme="teal" mr={3} onClick={handleLogOut}>
-                            logout
-                        </Button>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
-
-            <IconButton
-                icon={colorMode === 'light' ? <FiMoon /> : <FiSun />}
-                isRound
-                size="lg"
-                position="fixed"
-                bottom={4}
-                right={4}
-                onClick={toggleColorMode}
-                colorScheme="teal"
-            />
         </ChakraProvider>
     );
 };

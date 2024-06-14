@@ -5,7 +5,6 @@ import Login from './Pages/Login'
 import SignUp from './Pages/SignUp'
 import { useEffect } from 'react'
 import { useContext } from 'react'
-import './App.css'
 import axios from 'axios'
 axios.defaults.withCredentials=true
 import { Navigate } from 'react-router-dom'
