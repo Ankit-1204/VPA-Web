@@ -19,7 +19,7 @@ import {
     Flex,
     Text,
     useColorMode,
-    Checkbox, // Import Checkbox from Chakra UI
+    Checkbox,
     Avatar,
     Menu,
     MenuButton,
@@ -69,6 +69,7 @@ const Home = () => {
             setEvents([...events, newEvent]);
             setSelectedDateEvents([...selectedDateEvents, newEvent]);
             setNewEventTitle('');
+            setSelectedRecipients([]); // Reset selected recipients
             onClose();
         }
     };
@@ -83,6 +84,7 @@ const Home = () => {
 
     const handleInputEvent = async () => {
         // Handle input event logic here
+        handleAddEvent(); // Ensure this function is called when input is submitted
     };
 
     return (
@@ -197,5 +199,6 @@ const Home = () => {
         </ChakraProvider>
     );
 };
+
 export default Home;
 
