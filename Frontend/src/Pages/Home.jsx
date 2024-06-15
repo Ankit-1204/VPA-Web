@@ -45,13 +45,13 @@ const Home = () => {
     const { colorMode, toggleColorMode } = useColorMode();
     const [selectedRecipients, setSelectedRecipients] = useState([]); 
   
-    const recipients = [
-        'John Doe',
-        'Jane Smith',
-        'Alice Johnson',
-        'Bob Brown',
-        'Charlie Davis'
-    ];
+    // const recipients = [
+    //     'John Doe',
+    //     'Jane Smith',
+    //     'Alice Johnson',
+    //     'Bob Brown',
+    //     'Charlie Davis'
+    // ];
     const colorOptions = [
         { name: 'Red', colorCode: '#E57373' },
         { name: 'Purple', colorCode: '#D8BFD8' },
@@ -138,7 +138,7 @@ const Home = () => {
                 start: eventDateTime,
                 mail:userInfo.user.email,
                 teamId:userInfo.user.team,
-                id:userInfo.user.id
+                id:[userInfo.user.id, ...selectedRecipients]  
             })
             
                 const scheduledEvent = todb.data.event;
@@ -210,7 +210,7 @@ const Home = () => {
                 start: newDateTime,
                 mail:userInfo.user.email,
                 teamId:userInfo.user.team,
-                id:userInfo.user.id
+                id:[userInfo.user.id, ...selectedRecipients]  
             })
             
                 const scheduledEvent = todb.data.event;
@@ -312,15 +312,15 @@ const Home = () => {
                     </Box>
                     <Box>
                         <Text fontSize="lg" mb={2}>Select Recipient(s)</Text>
-                        {recipients.map((recipient, index) => (
+                        {userInfo.usersInTeam.filter(recipient => recipient._id !== userInfo.user.id).map((recipient, index) => (
                             <Checkbox
-                                key={index}
-                                isChecked={selectedRecipients.includes(recipient)}
-                                onChange={() => handleRecipientChange(recipient)}
+                                key={recipient._id}
+                                isChecked={selectedRecipients.includes(recipient._id)}
+                                onChange={() => handleRecipientChange(recipient._id)}
                                 colorScheme="teal"
                                 mb={2}
                             >
-                                {recipient}
+                                {recipient.firstName}
                             </Checkbox>
                         ))}
                     </Box>

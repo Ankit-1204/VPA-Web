@@ -6,28 +6,27 @@ const schedule= async(req,res)=>{
     const start=data.start;
     const mail=data.mail;
     const teamID=data.teamId;
-    const userID=data.id;
+    const userIDs=data.id;
     try{
         const event= await Event.create({
             purpose:title,
             date:start,
-            users:[userID]
+            users:userIDs
         })
-        const user=await User.findOneAndUpdate(
-            {email:mail,team: teamID},
-            
-            {
-                $push:{remainder:event._id}
-            }
-        )
-        if (!user) {
-            return res.status(404).send({ message: "User not found" });
+        
+        for (const userID of userIDs) {
+            await User.findOneAndUpdate(
+                { _id: userID, team: teamID },
+                { $push: { remainder: event._id } }
+            );
         }
+        
 
         console.log(12)
-        res.status(200).send({ message: "Event scheduled and user updated", event:event });
-    }catch(error){
-        console.log(error);
+        res.status(200).send({ message: "Event scheduled and users updated", event: event });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Error scheduling event", error: error.message });
     }
 }
 const deleteSchedule= async (req,res)=>{
