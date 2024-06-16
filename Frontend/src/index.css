@@ -11,3 +11,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.fc .fc-col-header-cell {
+  color: black !important;
+}
