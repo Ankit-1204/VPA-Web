@@ -1,6 +1,7 @@
 const jwt= require('jsonwebtoken')
 const {hashPassword,comparePassword} = require('../helpers/auth');
-const {User} = require('../models/user')
+const {User,Team} = require('../models/user')
+const {Event}=require('../models/event');
 
 const signUp=async (req,res)=>{
     const generateRandomString = (length) => {
@@ -38,7 +39,7 @@ const signUp=async (req,res)=>{
         }
 
     }
-    const exist = await User.findOne({ email: email, team: teamId })
+    const exist = await User.findOne({ email: email})
     if(exist){
         return res.json({
             error:"account with same email for this team exist. Please use different email."
@@ -75,7 +76,42 @@ const signUp=async (req,res)=>{
         team:finalTeamId,
         password:hashedPassword
     })
-    return res.json(user)
+    if (isJoining) {
+        
+        const newteam = await Team.findOneAndUpdate(
+            { team: finalTeamId },                
+            { $push: { users: user._id } },      
+            { new: true }                         
+        );
+        
+        if (!newteam) {
+            
+            return res.json({
+                error:"Team doesnt exist!!"
+            })
+        }
+        else{
+            jwt.sign({team:teamId,id:user._id,firstName:firstName,lastName:lastName,email:email},process.env.JWT_SECRET,{expiresIn: '15d'},(err,token)=>{
+                if(err) throw err;
+                res.cookie('token',token).json({user,newteam})
+               })
+            
+        }
+    }else {
+   
+        const newteam = await Team.create({
+            team: finalTeamId,
+            users: [user._id]
+        });
+    
+        console.log('New team created:', newteam);
+        jwt.sign({team:finalTeamId,id:user._id,firstName:firstName,lastName:lastName,email:email},process.env.JWT_SECRET,{expiresIn: '15d'},(err,token)=>{
+            if(err) console.log( err);
+            res.cookie('token',token).json({user,newteam})
+           })
+        
+    }
+    
 } catch (error){
     console.log(error);
 }
@@ -96,6 +132,8 @@ const login= async(req,res)=>{
         })
     }
     const teamId=user.team;
+    const teamData = await Team.findOne({ team: teamId });
+    const remainder=user.remainder;
     const firstName=user.firstName;
     const lastName=user.lastName;
     const hashed=user.password;
@@ -104,16 +142,56 @@ const login= async(req,res)=>{
         return res.json({error:'Passwords do not match'})
     }
     else{
-        jwt.sign({team:teamId,id:user._id,firstName:firstName,lastName:lastName,email:email},process.env.JWT_SECRET,{},(err,token)=>{
-            if(err) throw err;
-            res.cookie('token',token).json(user)
+        console.log(process.env.JWT_SECRET);
+        jwt.sign({team:teamId,id:user._id,firstName:firstName,lastName:lastName,email:email},process.env.JWT_SECRET,{expiresIn: '15d'},(err,token)=>{
+            if(err) console.log( err);
+            res.cookie('token',token).json({user,teamData})
            })
     }
 }catch(error){
     console.log(error);
 }
 }
+const logout=(req,res)=>{
+    try{
+    res.cookie("token","",{maxAge:0});
+    res.status(200).json({message:"Logged out successfully"});
+    }catch(error){
+     console.log("Error in logout controller",error.message);
+     res.status(500).json({error:"Internal Server Error"});
+    }
+};
+
+const profile= async (req,res)=>{
+    try{
+        const {token}= req.cookies;
+        if(token){
+             jwt.verify(token,process.env.JWT_SECRET,async (err,user)=>{
+                if(err) 
+                {
+                    console.log(err);
+                  res.json(null)
+                }
+                const useId = user.id;
+                const userr = await User.findById(useId);
+                const eventIds = userr.remainder;
+                const events = await Event.find({ _id: { $in: eventIds } });
+                const teamData = await Team.findOne({ team: user.team });
+                const usersInTeam = await User.find({ team: user.team }, 'firstName'); 
+
+                console.log(user);
+                res.json({user:user,team:teamData,events:events,usersInTeam:usersInTeam})
+            })
+        }
+        else{
+            console.log('no cookie')
+             res.json(null);
+        }
+    }catch(err){
+        console.log(err);
+    }
+}
 
 module.exports={
-    signUp,login
+    signUp,login,logout,profile
 }
