@@ -5,7 +5,6 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,7 +12,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
+/*a {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
@@ -28,14 +27,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
+} 
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
+ button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -45,7 +39,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-}
+} 
 button:hover {
   border-color: #646cff;
 }
@@ -53,6 +47,31 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+.calendar-container {
+
+
+  width: 100%; /* Adjust the width as needed */
+
+
+  align-items: center;
+  padding-top: 50px; 
+
+}
+
+@media (min-width: 1024px) {
+  .calendar-container {
+
+    width: 10%;
+
+  }
+}
+
+@media (min-width: 1024px) {
+  .calendar-container {
+    width: 150%;
+  }
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -66,3 +85,44 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.calendar-box {
+  background-color: #fdf4f4;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fc-toolbar {
+  background-color: #3c5586; 
+  color: rgb(252, 245, 245);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.fc-button {
+  background-color: #3182ce;
+  color: white;
+  border-radius: 5px;
+  border: none;
+}
+
+.fc-button:hover {
+  background-color: #2b6cb0;
+}
+
+.fc-daygrid-event {
+  background-color: #4c8889; 
+  color: rgb(235, 231, 231);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+.fc-daygrid-day {
+  background-color: #2d80b4; 
+}
+
+.fc-title {
+
+  color: #0b47bf;
+} */
+
