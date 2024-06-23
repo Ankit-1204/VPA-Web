@@ -13,7 +13,7 @@ const app=express();
 
 const corsOptions = {
     origin: 'http://localhost:5173', // Allow requests from this origin
-    credentials: true, // Allow credentials (e.g., cookies, authorization headers)
+    credentials: true,
   };
 app.use(cors(corsOptions));
 
