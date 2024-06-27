@@ -1,4 +1,4 @@
-# VPA-Web(VIRTUALPERSONAL ASSISTANT)
+# VPA-Web
 
 ### Overview
 Welcome to the Virtual Personal Assistant Project repository! This project is a full-stack web application built using the MERN stack (MongoDB, Express.js, React, and Node.js).
